@@ -10,6 +10,12 @@ const httpOptions = {
   }),
 };
 
+const httpLogin = {
+  headers: new HttpHeaders({
+    'Content-type': 'application/x-www-form-urlencoded'
+  })
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,6 +24,10 @@ export class UserService {
   private apiUrl = 'http://localhost:8091/users';
 
   constructor(private http:HttpClient) { }
+
+  login(credentials: string): Observable<any> {
+    return this.http.post<any>('http://localhost:8091/login', credentials, httpLogin);
+  }
 
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.apiUrl, httpOptions);
