@@ -17,6 +17,8 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { UsersComponent } from './components/users/users.component';
+import { ButtonComponent } from './components/button/button.component';
+import { LoginComponent } from './components/login/login.component';
 
 // route path for components
 const appRoutes: Routes = []
@@ -24,7 +26,9 @@ const appRoutes: Routes = []
 @NgModule({
   declarations: [
     AppComponent,
-    UsersComponent
+    UsersComponent,
+    ButtonComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
