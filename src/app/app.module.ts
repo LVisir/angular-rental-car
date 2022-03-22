@@ -19,16 +19,20 @@ import { AppComponent } from './app.component';
 import { UsersComponent } from './components/users/users.component';
 import { ButtonComponent } from './components/button/button.component';
 import { LoginComponent } from './components/login/login.component';
+import { BookingComponent } from './components/booking/booking.component';
 
 // route path for components
-const appRoutes: Routes = []
+const appRoutes: Routes = [
+  {path: 'bookings', component: BookingComponent}
+]
 
 @NgModule({
   declarations: [
     AppComponent,
     UsersComponent,
     ButtonComponent,
-    LoginComponent
+    LoginComponent,
+    BookingComponent
   ],
   imports: [
     BrowserModule,
