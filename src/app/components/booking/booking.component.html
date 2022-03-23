@@ -1,27 +1,21 @@
-<table class="table table-striped table-bordered">
+<table class="table table-striped table-bordered table-hover">
   <thead>
-  <tr>
+  <tr [ngStyle]="{textAlign: 'center'}">
     <th *ngFor="let header of bookingHeaderFields" scope="col">{{ header }}</th>
+    <th colspan="2">Actions</th>
   </tr>
   </thead>
- <!-- <tbody>
-  <tr>
-    <th scope="row">1</th>
-    <td>Mark</td>
-    <td>Otto</td>
-    <td>@mdo</td>
+  <tbody>
+  <tr *ngFor="let booking of bookingsList" [ngStyle]="{textAlign: 'center'}">
+    <td *ngFor="let field of mapping(booking) | keyvalue: returnZero">
+      {{field.value}}
+    </td>
+    <td [ngStyle]="{textAlign: 'center'}">
+      <a class='btn btn-primary btn-sm' [routerLink]="['add-booking', 5]">go</a>
+    </td>
+    <td [ngStyle]="{textAlign: 'center'}">
+      <a class='btn btn-primary btn-sm' [routerLink]="['add-booking', 5]">go</a>
+    </td>
   </tr>
-  <tr>
-    <th scope="row">2</th>
-    <td>Jacob</td>
-    <td>Thornton</td>
-    <td>@fat</td>
-  </tr>
-  <tr>
-    <th scope="row">3</th>
-    <td>Larry</td>
-    <td>the Bird</td>
-    <td>@twitter</td>
-  </tr>
-  </tbody>-->
+  </tbody>
 </table>

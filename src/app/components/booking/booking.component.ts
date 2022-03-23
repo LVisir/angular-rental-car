@@ -15,13 +15,19 @@ export class BookingComponent implements OnInit {
   bookingDbFields: string[] = [];
   bookingHeaderFields: string[] = [];
 
+  /**
+   * function to normal key property order for keyvalue pipe
+   */
+  returnZero() {
+    return 0
+  }
+
   constructor(private tableConfig: TableConfigService, private bookingService: BookingService) { }
 
   ngOnInit(): void {
-    this.tableConfig.dbFields = ['start','end', 'idBooking', 'user', 'vehicle', 'approval'];
+    this.tableConfig.dbFields = ['idBooking', 'start','end', 'user', 'vehicle', 'approval'];
     this.bookingDbFields = ['start','end', 'idBooking', 'user', 'vehicle', 'approval'];
-    this.tableConfig.tableHeaders = ['Start date', 'End date', 'Booking Id', 'User Id', 'Vehicle Id', 'Approval'];
-    this.bookingHeaderFields = ['Start date', 'End date', 'Booking Id', 'User Id', 'Vehicle Id', 'Approval'];
+    this.bookingHeaderFields = ['Id', 'Start date', 'End date', 'User Id', 'Vehicle Id', 'Approval'];
     this.bookingService.getBookings().subscribe((bookings) => {
       this.tableConfig.list = bookings;
       this.bookingsList = bookings;
@@ -44,6 +50,18 @@ export class BookingComponent implements OnInit {
       new TableFieldInfo(this.bookingDbFields[4], this.bookingHeaderFields[4], true, ''),
       new TableFieldInfo(this.bookingDbFields[5], this.bookingHeaderFields[5], false, ''),
     ]
+  }
+
+  mapObj = new Map()
+
+  mapping(booking: Booking): Map<any, any> {
+    this.mapObj.set('idBooking', booking.idBooking);
+    this.mapObj.set('start', booking.start);
+    this.mapObj.set('end', booking.end);
+    this.mapObj.set('user', booking.user.idUser);
+    this.mapObj.set('vehicle', booking.vehicle.idVehicle);
+    this.mapObj.set('approval', booking.approval);
+    return this.mapObj
   }
 
 }
