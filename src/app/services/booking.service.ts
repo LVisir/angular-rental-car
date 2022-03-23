@@ -3,6 +3,8 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Booking} from "../../interfaces/Booking";
 
+/*`LoginToken ${sessionStorage.getItem('tokenJWT')}`*/
+
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-type': 'application/json',

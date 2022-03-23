@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {TableConfigService} from "../../services/table-config.service";
 import {BookingService} from "../../services/booking.service";
-import { TableFieldInfo } from '../../../classes/TableFieldInfo';
 import {Booking} from "../../../interfaces/Booking";
+import {TableConfigService} from "../../services/table-config.service";
 
 @Component({
   selector: 'app-booking',
@@ -12,56 +11,48 @@ import {Booking} from "../../../interfaces/Booking";
 export class BookingComponent implements OnInit {
 
   bookingsList: Booking[] = [];
-  bookingDbFields: string[] = [];
   bookingHeaderFields: string[] = [];
+  currentPage!: number;
+  errorMessage: string = '';
+  currentPages: number[] = [];
+  dataSize!: number;
 
   /**
    * function to normal key property order for keyvalue pipe
    */
-  returnZero() {
+  returnZero(): number {
     return 0
   }
 
-  constructor(private tableConfig: TableConfigService, private bookingService: BookingService) { }
+  constructor(private bookingService: BookingService, private tableConfigService: TableConfigService) { }
 
   ngOnInit(): void {
-    this.tableConfig.dbFields = ['idBooking', 'start','end', 'user', 'vehicle', 'approval'];
-    this.bookingDbFields = ['start','end', 'idBooking', 'user', 'vehicle', 'approval'];
+
     this.bookingHeaderFields = ['Id', 'Start date', 'End date', 'User Id', 'Vehicle Id', 'Approval'];
-    this.bookingService.getBookings().subscribe((bookings) => {
-      this.tableConfig.list = bookings;
-      this.bookingsList = bookings;
+
+    this.bookingService.getBookings().subscribe({
+      next: bookings => {
+        this.bookingsList = bookings;
+        this.currentPage = bookings.length > 0 ? 1 : 0;
+        this.currentPages = this.tableConfigService.getCurrentPages(bookings.length);
+        this.dataSize = Math.floor(bookings.length/10);
+      },
+      error: err => {
+        this.errorMessage = err.error.error;
+      }
     });
-    this.tableConfig.dataSize = Math.floor(this.bookingsList.length/10);
-    this.tableConfig.currentPage = 1;
-    this.tableConfig.currentPages = this.tableConfig.getCurrentPages(this.bookingsList.length);
-    this.tableConfig.searchableFields = ['start','end', 'idBooking', 'user', 'vehicle'];
-    this.tableConfig.searchText = '';
-    this.tableConfig.filterSearchText = '';
-    this.tableConfig.searchButtonClicked = false;
-    this.tableConfig.disableResetHeaderButton = true;
-    this.tableConfig.disableResetPaginationButton = true;
-    this.tableConfig.disableResetTableButton = true;
-    this.tableConfig.fieldObjects = [
-      new TableFieldInfo(this.bookingDbFields[0], this.bookingHeaderFields[0], true, ''),
-      new TableFieldInfo(this.bookingDbFields[1], this.bookingHeaderFields[1], true, ''),
-      new TableFieldInfo(this.bookingDbFields[2], this.bookingHeaderFields[2], true, ''),
-      new TableFieldInfo(this.bookingDbFields[3], this.bookingHeaderFields[3], true, ''),
-      new TableFieldInfo(this.bookingDbFields[4], this.bookingHeaderFields[4], true, ''),
-      new TableFieldInfo(this.bookingDbFields[5], this.bookingHeaderFields[5], false, ''),
-    ]
+
   }
 
-  mapObj = new Map()
-
   mapping(booking: Booking): Map<any, any> {
-    this.mapObj.set('idBooking', booking.idBooking);
-    this.mapObj.set('start', booking.start);
-    this.mapObj.set('end', booking.end);
-    this.mapObj.set('user', booking.user.idUser);
-    this.mapObj.set('vehicle', booking.vehicle.idVehicle);
-    this.mapObj.set('approval', booking.approval);
-    return this.mapObj
+    const mapObj = new Map()
+    mapObj.set('idBooking', booking.idBooking);
+    mapObj.set('start', booking.start);
+    mapObj.set('end', booking.end);
+    mapObj.set('user', booking.user.idUser);
+    mapObj.set('vehicle', booking.vehicle.idVehicle);
+    mapObj.set('approval', booking.approval);
+    return mapObj;
   }
 
 }

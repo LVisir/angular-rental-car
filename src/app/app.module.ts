@@ -21,11 +21,15 @@ import { ButtonComponent } from './components/button/button.component';
 import { LoginComponent } from './components/login/login.component';
 import { BookingComponent } from './components/booking/booking.component';
 import { AddBookingComponent } from './components/add-booking/add-booking.component';
+import { CustomTableComponent } from './components/custom-table/custom-table.component';
+import { VehicleComponent } from './components/vehicle/vehicle.component';
 
 // route path for components
 const appRoutes: Routes = [
   {path: 'bookings', component: BookingComponent},
-  {path: 'bookings/add-booking/:id', component: AddBookingComponent}
+  {path: 'bookings/add-booking/:id', component: AddBookingComponent},
+  {path: 'users', component: UsersComponent},
+  {path: 'vehicles', component: VehicleComponent}
 ]
 
 @NgModule({
@@ -35,7 +39,9 @@ const appRoutes: Routes = [
     ButtonComponent,
     LoginComponent,
     BookingComponent,
-    AddBookingComponent
+    AddBookingComponent,
+    CustomTableComponent,
+    VehicleComponent
   ],
   imports: [
     BrowserModule,

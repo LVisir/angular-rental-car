@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { User } from '../../../interfaces/User';
+import {TableConfigService} from "../../services/table-config.service";
 
 @Component({
   selector: 'app-users',
@@ -9,41 +10,51 @@ import { User } from '../../../interfaces/User';
 })
 export class UsersComponent implements OnInit {
 
-  users: User[] = [];
-  errorMessage!: string;
+  usersList: User[] = [];
+  userTableHeader: string[] = [];
+  currentPage!: number;
+  errorMessage: string = '';
+  currentPages: number[] = [];
+  dataSize!: number;
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private tableConfigService: TableConfigService) { }
 
   ngOnInit(): void {
+
+    this.userTableHeader = ['Name', 'Surname', 'Date of birth', 'Fiscal Code', 'Email', 'Customer Id'];
+
     this.userService.getUsers().subscribe({
       next: users => {
-        this.users = users;
+        this.usersList = users;
+        this.currentPage = users.length > 0 ? 1 : 0;
+        this.currentPages = this.tableConfigService.getCurrentPages(users.length);
+        this.dataSize = Math.floor(users.length/10);
       },
       error: err => {
         this.errorMessage = err.error.error;
       }
     });
+
   }
 
-  printUsers(): void {
-      this.userService.getUsers()
-        .subscribe({
-          next: c => {
-            console.log(c)
-          },
-          error: error => {
-            console.log(error.error.error)
-          }
-        });
+  mapping(user: User): Map<any,any> {
+    const mapObj = new Map();
+    mapObj.set('name', user.name);
+    mapObj.set('surname', user.surname);
+    mapObj.set('birthDate', user.birthDate);
+    mapObj.set('cf', user.cf);
+    mapObj.set('email', user.email);
+    mapObj.set('idUser', user.idUser);
+
+    return mapObj;
+
   }
 
-  testDelete(): void {
-    this.userService.deleteUser(9922282803)
-      .subscribe({
-        error: err => {
-          console.log(err)
-        }
-      })
+  /**
+   * function to normal key property order for keyvalue pipe
+   */
+  returnZero(): number {
+    return 0
   }
 
 }

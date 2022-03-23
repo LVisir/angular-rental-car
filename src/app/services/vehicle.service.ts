@@ -3,10 +3,12 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Vehicle} from "../../interfaces/Vehicle";
 
+/* `LoginToken ${sessionStorage.getItem('tokenJWT')}` */
+
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-type': 'application/json',
-    'Authorization': `LoginToken ${sessionStorage.getItem('tokenJWT')}`
+    'Authorization': `LoginToken eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlZG9hcmRvLmFhYWJAZW1haWwuY29tIiwicm9sZXMiOlsiU1VQRVJVU0VSIl19.av2j08OkgamTi_4_H0H02MsJdEwvVYNeWq-a-bm0q8s`
   }),
 };
 
