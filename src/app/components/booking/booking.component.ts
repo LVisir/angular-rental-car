@@ -2,37 +2,27 @@ import { Component, OnInit } from '@angular/core';
 import {BookingService} from "../../services/booking.service";
 import {Booking} from "../../../interfaces/Booking";
 import {TableConfigService} from "../../services/table-config.service";
+import {TableTools} from "../../../classes/TableTools";
+import {TableFunctions} from "../../../interfaces/TableFunctions";
 
 @Component({
   selector: 'app-booking',
   templateUrl: './booking.component.html',
   styleUrls: ['./booking.component.css']
 })
-export class BookingComponent implements OnInit {
+export class BookingComponent extends TableTools<Booking> implements OnInit, TableFunctions<Booking> {
 
-  bookingsList: Booking[] = [];
-  bookingHeaderFields: string[] = [];
-  currentPage!: number;
-  errorMessage: string = '';
-  currentPages: number[] = [];
-  dataSize!: number;
-
-  /**
-   * function to normal key property order for keyvalue pipe
-   */
-  returnZero(): number {
-    return 0
+  constructor(private bookingService: BookingService, private tableConfigService: TableConfigService) {
+    super();
   }
-
-  constructor(private bookingService: BookingService, private tableConfigService: TableConfigService) { }
 
   ngOnInit(): void {
 
-    this.bookingHeaderFields = ['Id', 'Start date', 'End date', 'User Id', 'Vehicle Id', 'Approval'];
+    this.tableHeader = ['Id', 'Start date', 'End date', 'User Id', 'Vehicle Id', 'Approval'];
 
     this.bookingService.getBookings().subscribe({
       next: bookings => {
-        this.bookingsList = bookings;
+        this.list = bookings;
         this.currentPage = bookings.length > 0 ? 1 : 0;
         this.currentPages = this.tableConfigService.getCurrentPages(bookings.length);
         this.dataSize = Math.floor(bookings.length/10);

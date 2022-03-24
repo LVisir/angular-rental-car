@@ -16,13 +16,13 @@
   <nav aria-label='Page navigation example'>
     <ul class='pagination justify-content-end'>
       <li [ngClass]="{'page-item': true}" [class.disabled]="currentPages[0]===1" [ngStyle]="currentPages[0] === 1 ? {'cursor': 'default'} : {'cursor': 'pointer'}">
-      <button [ngClass]="{'page-link': true}">Previous</button>
+      <button [ngClass]="{'page-link': true}" (click)="backward(currentPage, currentPages, currentPage)" >Previous</button>
       </li>
       <li *ngFor="let page of currentPages" [ngClass]="{'page-item': true, 'active': currentPage===page}">
-        <button [ngClass]="{'page-link': true}" [ngStyle]="{'cursor': 'pointer'}">{{ page }}</button>
+        <button [ngClass]="{'page-link': true}" [ngStyle]="{'cursor': 'pointer'}" (click)="changePage(page)" >{{ page }}</button>
       </li>
       <li [ngClass]="{'page-item': true}" [class.disabled]="currentPages[currentPages.length-1]===dataSize+1" [ngStyle]="{'cursor': currentPages[currentPages.length-1]===dataSize+1 ? 'default' : 'pointer'}">
-      <button [ngClass]="{'page-link': true}" [ngStyle]="{'cursor': 'pointer'}">Next</button>
+      <button [ngClass]="{'page-link': true}" [ngStyle]="{'cursor': 'pointer'}" (click)="forward(currentPage, currentPages, currentPage)">Next</button>
       </li>
     </ul>
   </nav>

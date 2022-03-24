@@ -1,38 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import {Vehicle} from "../../../interfaces/Vehicle";
 import {VehicleService} from "../../services/vehicle.service";
-import {delay} from "rxjs";
 import {TableConfigService} from "../../services/table-config.service";
+import {TableTools} from "../../../classes/TableTools";
+import {TableFunctions} from "../../../interfaces/TableFunctions";
 
 @Component({
   selector: 'app-vehicle',
   templateUrl: './vehicle.component.html',
   styleUrls: ['./vehicle.component.css']
 })
-export class VehicleComponent implements OnInit {
+export class VehicleComponent extends TableTools<Vehicle> implements OnInit, TableFunctions<Vehicle> {
 
-  vehiclesList: Vehicle[] = [];
-  vehicleTableHeaders: string[] = [];
-  currentPage!: number;
-  errorMessage: string = '';
-  currentPages: number[] = [];
-  dataSize!: number;
-
-  constructor(private vehicleService: VehicleService, private tableConfigService: TableConfigService) { }
+  constructor(private vehicleService: VehicleService, private tableConfigService: TableConfigService) {
+    super();
+  }
 
   ngOnInit(): void {
 
-    this.vehicleTableHeaders = ['License plate', 'Model', 'Typology', 'Manufacturer', 'Registration year', 'Vehicle Id'];
+    this.tableHeader = ['License plate', 'Model', 'Typology', 'Manufacturer', 'Registration year', 'Vehicle Id'];
 
     this.vehicleService.getVehicles()
-      .pipe(
-        delay(1000)
-      )
       .subscribe({
         next: vehicles => {
-          this.vehiclesList = vehicles;
-          this.currentPage = vehicles.length > 0 ? 1 : 0;
-          this.currentPages = this.tableConfigService.getCurrentPages(vehicles.length);
+          this.list = vehicles;
+          super.currentPage = vehicles.length > 0 ? 1 : 0;
+          super.currentPages = this.tableConfigService.getCurrentPages(vehicles.length);
           this.dataSize = Math.floor(vehicles.length/10);
         },
         error: err => {
@@ -53,13 +46,6 @@ export class VehicleComponent implements OnInit {
 
     return mapObj;
 
-  }
-
-  /**
-   * function to normal key property order for keyvalue pipe
-   */
-  returnZero(): number {
-    return 0
   }
 
 }

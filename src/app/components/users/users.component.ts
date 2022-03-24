@@ -2,30 +2,27 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { User } from '../../../interfaces/User';
 import {TableConfigService} from "../../services/table-config.service";
+import {TableFunctions} from "../../../interfaces/TableFunctions";
+import {TableTools} from "../../../classes/TableTools";
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent extends TableTools<User> implements OnInit, TableFunctions<User> {
 
-  usersList: User[] = [];
-  userTableHeader: string[] = [];
-  currentPage!: number;
-  errorMessage: string = '';
-  currentPages: number[] = [];
-  dataSize!: number;
-
-  constructor(private userService: UserService, private tableConfigService: TableConfigService) { }
+  constructor(private userService: UserService, private tableConfigService: TableConfigService) {
+    super();
+  }
 
   ngOnInit(): void {
 
-    this.userTableHeader = ['Name', 'Surname', 'Date of birth', 'Fiscal Code', 'Email', 'Customer Id'];
+    this.tableHeader = ['Name', 'Surname', 'Date of birth', 'Fiscal Code', 'Email', 'Customer Id'];
 
     this.userService.getUsers().subscribe({
       next: users => {
-        this.usersList = users;
+        this.list = users;
         this.currentPage = users.length > 0 ? 1 : 0;
         this.currentPages = this.tableConfigService.getCurrentPages(users.length);
         this.dataSize = Math.floor(users.length/10);
@@ -37,7 +34,7 @@ export class UsersComponent implements OnInit {
 
   }
 
-  mapping(user: User): Map<any,any> {
+  mapping(user: User): Map<any, any> {
     const mapObj = new Map();
     mapObj.set('name', user.name);
     mapObj.set('surname', user.surname);
@@ -47,14 +44,6 @@ export class UsersComponent implements OnInit {
     mapObj.set('idUser', user.idUser);
 
     return mapObj;
-
-  }
-
-  /**
-   * function to normal key property order for keyvalue pipe
-   */
-  returnZero(): number {
-    return 0
   }
 
 }

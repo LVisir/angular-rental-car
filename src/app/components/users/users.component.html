@@ -1,10 +1,13 @@
 <app-custom-table
   [mappingFunction]="mapping"
   [keyObjectOrder]="returnZero"
-  [list]="usersList"
-  [tableHeaders]="userTableHeader"
+  [list]="list"
+  [tableHeaders]="tableHeader"
   [currentPage]="currentPage"
   [currentPages]="currentPages"
   [dataSize]="dataSize"
+  [forward]="forward"
+  [backward]="backward"
+  [changePage]="changePage"
 ></app-custom-table>
 
