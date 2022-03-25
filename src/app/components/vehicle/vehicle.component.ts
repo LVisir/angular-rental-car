@@ -1,31 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import {Vehicle} from "../../../interfaces/Vehicle";
 import {VehicleService} from "../../services/vehicle.service";
-import {TableConfigService} from "../../services/table-config.service";
 import {TableTools} from "../../../classes/TableTools";
-import {TableFunctions} from "../../../interfaces/TableFunctions";
+import {TableUtility} from "../../../interfaces/TableUtility";
+import {HeaderTableDatabase} from "../../../interfaces/HeaderTableDatabase";
 
 @Component({
   selector: 'app-vehicle',
   templateUrl: './vehicle.component.html',
   styleUrls: ['./vehicle.component.css']
 })
-export class VehicleComponent extends TableTools<Vehicle> implements OnInit, TableFunctions<Vehicle> {
+export class VehicleComponent extends TableTools<Vehicle> implements OnInit, TableUtility<Vehicle> {
 
-  constructor(private vehicleService: VehicleService, private tableConfigService: TableConfigService) {
+  constructor(private vehicleService: VehicleService) {
     super();
   }
 
   ngOnInit(): void {
-
-    this.tableHeader = ['License plate', 'Model', 'Typology', 'Manufacturer', 'Registration year', 'Vehicle Id'];
+    this.dbHeader = ['licensePlate', 'model', 'typology', 'manufacturer', 'registrYear', 'idVehicle'];
 
     this.vehicleService.getVehicles()
       .subscribe({
         next: vehicles => {
           this.list = vehicles;
           super.currentPage = vehicles.length > 0 ? 1 : 0;
-          super.currentPages = this.tableConfigService.getCurrentPages(vehicles.length);
+          super.currentPages = this.getCurrentPages(vehicles.length);
           this.dataSize = Math.floor(vehicles.length/10);
         },
         error: err => {
@@ -47,5 +46,44 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
     return mapObj;
 
   }
+
+  tableDbHeader: HeaderTableDatabase[] = [
+    {
+      headerTable: 'License plate',
+      headerDb: ['licensePlate'],
+      state: 0,
+      sortable: true
+    },
+    {
+      headerTable: 'Model',
+      headerDb: ['model'],
+      state: 0,
+      sortable: true
+    },
+    {
+      headerTable: 'Typology',
+      headerDb: ['typology'],
+      state: 0,
+      sortable: true
+    },
+    {
+      headerTable: 'Manufacturer',
+      headerDb: ['manufacturer'],
+      state: 0,
+      sortable: true
+    },
+    {
+      headerTable: 'Registration year',
+      headerDb: ['registrYear'],
+      state: 0,
+      sortable: true
+    },
+    {
+      headerTable: 'Vehicle Id',
+      headerDb: ['idVehicle'],
+      state: 0,
+      sortable: true
+    },
+  ]
 
 }

@@ -1,30 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { User } from '../../../interfaces/User';
-import {TableConfigService} from "../../services/table-config.service";
-import {TableFunctions} from "../../../interfaces/TableFunctions";
+import {TableUtility} from "../../../interfaces/TableUtility";
 import {TableTools} from "../../../classes/TableTools";
+import {HeaderTableDatabase} from "../../../interfaces/HeaderTableDatabase";
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
 })
-export class UsersComponent extends TableTools<User> implements OnInit, TableFunctions<User> {
+export class UsersComponent extends TableTools<User> implements OnInit, TableUtility<User> {
 
-  constructor(private userService: UserService, private tableConfigService: TableConfigService) {
+  constructor(private userService: UserService) {
     super();
   }
 
   ngOnInit(): void {
 
-    this.tableHeader = ['Name', 'Surname', 'Date of birth', 'Fiscal Code', 'Email', 'Customer Id'];
+    this.dbHeader = ['name', 'surname', 'birthDate', 'cf', 'email', 'idUser']
 
     this.userService.getUsers().subscribe({
       next: users => {
         this.list = users;
         this.currentPage = users.length > 0 ? 1 : 0;
-        this.currentPages = this.tableConfigService.getCurrentPages(users.length);
+        this.currentPages = this.getCurrentPages(users.length);
         this.dataSize = Math.floor(users.length/10);
       },
       error: err => {
@@ -45,5 +45,44 @@ export class UsersComponent extends TableTools<User> implements OnInit, TableFun
 
     return mapObj;
   }
+
+  tableDbHeader: HeaderTableDatabase[] = [
+    {
+      headerTable: 'Name',
+      headerDb: ['name'],
+      state: 0,
+      sortable: true
+    },
+    {
+      headerTable: 'Surname',
+      headerDb: ['surname'],
+      state: 0,
+      sortable: true
+    },
+    {
+      headerTable: 'Date of birth',
+      headerDb: ['birthDate'],
+      state: 0,
+      sortable: true
+    },
+    {
+      headerTable: 'Fiscal Code',
+      headerDb: ['cf'],
+      state: 0,
+      sortable: true
+    },
+    {
+      headerTable: 'Email',
+      headerDb: ['email'],
+      state: 0,
+      sortable: true
+    },
+    {
+      headerTable: 'Customer Id',
+      headerDb: ['idUser'],
+      state: 0,
+      sortable: true
+    },
+  ]
 
 }

@@ -1,12 +1,27 @@
 <table class="table table-striped table-bordered table-hover">
   <thead>
   <tr [ngStyle]="{textAlign: 'center'}">
-    <th *ngFor="let header of tableHeaders" scope="col">{{ header }}</th>
+    <ng-container *ngFor="let header of tableDbHeaders">
+      <th scope="col">{{ header.headerTable }}</th>
+      <th *ngIf="header.sortable">
+        <fa-icon [icon]="faFilter" [ngStyle]="{'cursor': 'pointer'}" *ngIf="header.state===0"
+                 (click)="header.state = changeOrderState(header.state);
+                 list = sortMethod(list, header.headerDb, true);
+                 resetAllOthersOrderType(tableDbHeaders, header.headerTable)"></fa-icon>
+        <fa-icon [icon]="faAngleDown" [ngStyle]="{'cursor': 'pointer'}" *ngIf="header.state===1"
+                 (click)="header.state = changeOrderState(header.state);
+                 list = sortMethod(list, header.headerDb, false);
+                 resetAllOthersOrderType(tableDbHeaders, header.headerTable)"></fa-icon>
+        <fa-icon [icon]="faAngleUp" [ngStyle]="{'cursor': 'pointer'}" *ngIf="header.state===2"
+                 (click)="header.state = changeOrderState(header.state);
+                 resetAllOthersOrderType(tableDbHeaders, header.headerTable)"></fa-icon>
+      </th>
+    </ng-container>
   </tr>
   </thead>
   <tbody>
   <tr *ngFor="let item of list | slice:(currentPage-1)*10:((currentPage-1)*10)+10" [ngStyle]="{textAlign: 'center'}">
-    <td *ngFor="let field of mappingFunction(item) | keyvalue: keyObjectOrder">
+    <td *ngFor="let field of mappingFunction(item) | keyvalue: keyObjectOrder" colspan="2">
       {{ field.value }}
     </td>
   </tr>
@@ -27,3 +42,5 @@
     </ul>
   </nav>
 </div>
+
+<!--{{ console.log(sortMethod(list, ['idBooking'], true)) }}-->

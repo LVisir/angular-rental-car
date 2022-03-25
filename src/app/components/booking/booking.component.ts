@@ -1,30 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import {BookingService} from "../../services/booking.service";
 import {Booking} from "../../../interfaces/Booking";
-import {TableConfigService} from "../../services/table-config.service";
 import {TableTools} from "../../../classes/TableTools";
-import {TableFunctions} from "../../../interfaces/TableFunctions";
+import {TableUtility} from "../../../interfaces/TableUtility";
+import {HeaderTableDatabase} from "../../../interfaces/HeaderTableDatabase";
 
 @Component({
   selector: 'app-booking',
   templateUrl: './booking.component.html',
   styleUrls: ['./booking.component.css']
 })
-export class BookingComponent extends TableTools<Booking> implements OnInit, TableFunctions<Booking> {
+export class BookingComponent extends TableTools<Booking> implements OnInit, TableUtility<Booking> {
 
-  constructor(private bookingService: BookingService, private tableConfigService: TableConfigService) {
+  constructor(private bookingService: BookingService) {
     super();
   }
 
   ngOnInit(): void {
 
-    this.tableHeader = ['Id', 'Start date', 'End date', 'User Id', 'Vehicle Id', 'Approval'];
+    this.dbHeader = ['idBooking', 'start', 'end', 'user', 'vehicle', 'approval'];
 
     this.bookingService.getBookings().subscribe({
       next: bookings => {
         this.list = bookings;
         this.currentPage = bookings.length > 0 ? 1 : 0;
-        this.currentPages = this.tableConfigService.getCurrentPages(bookings.length);
+        this.currentPages = this.getCurrentPages(bookings.length);
         this.dataSize = Math.floor(bookings.length/10);
       },
       error: err => {
@@ -44,5 +44,43 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
     mapObj.set('approval', booking.approval);
     return mapObj;
   }
+
+  tableDbHeader: HeaderTableDatabase[] = [
+    {
+      headerTable: 'Id',
+      headerDb: ['idBooking'],
+      state: 0,
+      sortable: true
+    },
+    {
+      headerTable: 'Start date',
+      headerDb: ['start'],
+      state: 0,
+      sortable: true
+    },
+    {
+      headerTable: 'End date',
+      headerDb: ['end'],
+      state: 0,
+      sortable: true
+    },
+    {
+      headerTable: 'User Id',
+      headerDb: ['user', 'idUser'],
+      state: 0,
+      sortable: true
+    },
+    {
+      headerTable: 'Vehicle Id',
+      headerDb: ['vehicle', 'idVehicle'],
+      state: 0,
+      sortable: true
+    },
+    {
+      headerTable: 'Approval',
+      headerDb: ['Approval'],
+      sortable: false
+    },
+  ]
 
 }

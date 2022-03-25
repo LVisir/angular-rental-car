@@ -21,26 +21,6 @@ export class TableConfigService {
   private _disableResetTableButton!: boolean;
   private _fieldObjects!: TableFieldInfo[];
 
-  getCurrentPages(size: number): number[] {
-    let pages = [1,2,3]
-
-    if(size > 0){
-      let nPages = Math.floor(size/10)
-
-      if(nPages<3){
-        if(nPages<2){
-          pages = [1]
-        }
-        else pages = [2]
-      }
-    }
-    else {
-      pages = []
-    }
-
-    return pages
-  }
-
   get dbFields(): string[] {
     return this._dbFields;
   }
