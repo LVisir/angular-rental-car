@@ -1,3 +1,5 @@
+import {Actions} from "../interfaces/Actions";
+
 export class TableTools<T> {
 
   currentPages: number[] = [];
@@ -6,6 +8,7 @@ export class TableTools<T> {
   dbHeader: string[] = [];
   errorMessage: string = '';
   dataSize!: number;
+  action: Actions = {};
 
   shiftOrder(state: number): number {
     return (state+1)%3;

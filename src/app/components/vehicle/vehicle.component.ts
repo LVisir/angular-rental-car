@@ -4,6 +4,7 @@ import {VehicleService} from "../../services/vehicle.service";
 import {TableTools} from "../../../classes/TableTools";
 import {TableUtility} from "../../../interfaces/TableUtility";
 import {HeaderTableDatabase} from "../../../interfaces/HeaderTableDatabase";
+import {Actions} from "../../../interfaces/Actions";
 
 @Component({
   selector: 'app-vehicle',
@@ -22,7 +23,7 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
     this.vehicleService.getVehicles()
       .subscribe({
         next: vehicles => {
-          this.list = vehicles;
+          this.attachActions(vehicles);
           super.currentPage = vehicles.length > 0 ? 1 : 0;
           super.currentPages = this.getCurrentPages(vehicles.length);
           this.dataSize = Math.floor(vehicles.length/10);
@@ -85,5 +86,27 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
       sortable: true
     },
   ]
+
+  attachActions(object: Vehicle[]): void {
+
+    this.action = {
+      name: 'Add',
+      execute(obj: any) {
+        console.log('it works');
+      },
+      type: 'Move'
+    }
+
+    let actions: Actions[] = [
+      {...this.action}
+    ]
+
+    object.map(x => {
+      this.list.push({...x, actions: actions})
+    })
+
+    console.log(object)
+
+  }
 
 }

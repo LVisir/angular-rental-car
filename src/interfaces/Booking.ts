@@ -1,5 +1,6 @@
 import {Vehicle} from "./Vehicle";
 import {User} from "./User";
+import {Actions} from "./Actions";
 
 export interface Booking{
   idBooking?: number;
@@ -12,4 +13,5 @@ export interface Booking{
   user: {
     idUser: number;
   } | User;
+  actions: Actions[];
 }

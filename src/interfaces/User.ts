@@ -1,3 +1,5 @@
+import {Actions} from "./Actions";
+
 export interface User{
   idUser?: number;
   name: string;
@@ -7,4 +9,5 @@ export interface User{
   role: string;
   email: string;
   password: string;
+  actions: Actions[];
 }

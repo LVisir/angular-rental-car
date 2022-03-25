@@ -1,3 +1,5 @@
+import {Actions} from "./Actions";
+
 export interface Vehicle{
   idVehicle?: number;
   licensePlate: string;
@@ -5,4 +7,5 @@ export interface Vehicle{
   model: string;
   registrYear: string;
   typology: string;
+  actions: Actions[];
 }

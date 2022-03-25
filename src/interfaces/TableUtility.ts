@@ -6,4 +6,6 @@ export interface TableUtility<T> {
 
   mapping(object: T): Map<any, any>;
 
+  attachActions(object: T[]): void;
+
 }

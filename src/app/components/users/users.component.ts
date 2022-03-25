@@ -4,6 +4,7 @@ import { User } from '../../../interfaces/User';
 import {TableUtility} from "../../../interfaces/TableUtility";
 import {TableTools} from "../../../classes/TableTools";
 import {HeaderTableDatabase} from "../../../interfaces/HeaderTableDatabase";
+import {Actions} from "../../../interfaces/Actions";
 
 @Component({
   selector: 'app-users',
@@ -22,7 +23,7 @@ export class UsersComponent extends TableTools<User> implements OnInit, TableUti
 
     this.userService.getUsers().subscribe({
       next: users => {
-        this.list = users;
+        this.attachActions(users);
         this.currentPage = users.length > 0 ? 1 : 0;
         this.currentPages = this.getCurrentPages(users.length);
         this.dataSize = Math.floor(users.length/10);
@@ -84,5 +85,25 @@ export class UsersComponent extends TableTools<User> implements OnInit, TableUti
       sortable: true
     },
   ]
+
+  attachActions(object: User[]): void {
+
+    this.action = {
+      name: 'Add',
+      execute(obj: any) {
+        console.log('it works');
+      },
+      type: 'Move'
+    }
+
+    let actions: Actions[] = [
+      {...this.action}
+    ]
+
+    object.map(x => {
+      this.list.push({...x, actions: actions})
+    })
+
+  }
 
 }

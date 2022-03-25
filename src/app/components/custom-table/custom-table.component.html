@@ -2,7 +2,7 @@
   <thead>
   <tr [ngStyle]="{textAlign: 'center'}">
     <ng-container *ngFor="let header of tableDbHeaders">
-      <th scope="col">{{ header.headerTable }}</th>
+      <th scope="col" [attr.colspan]="!header.sortable && 2">{{ header.headerTable }}</th>
       <th *ngIf="header.sortable">
         <fa-icon [icon]="faFilter" [ngStyle]="{'cursor': 'pointer'}" *ngIf="header.state===0"
                  (click)="header.state = changeOrderState(header.state);
@@ -17,12 +17,16 @@
                  resetAllOthersOrderType(tableDbHeaders, header.headerTable)"></fa-icon>
       </th>
     </ng-container>
+    <th>Actions</th>
   </tr>
   </thead>
   <tbody>
   <tr *ngFor="let item of list | slice:(currentPage-1)*10:((currentPage-1)*10)+10" [ngStyle]="{textAlign: 'center'}">
     <td *ngFor="let field of mappingFunction(item) | keyvalue: keyObjectOrder" colspan="2">
       {{ field.value }}
+    </td>
+    <td *ngFor="let action of item.actions" [attr.colspan]="item.actions.length">
+      <button (click)="action.execute('str')">Add</button>
     </td>
   </tr>
   </tbody>

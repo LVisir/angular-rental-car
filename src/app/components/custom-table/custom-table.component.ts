@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import { faAngleDown, faFilter, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import {HeaderTableDatabase} from "../../../interfaces/HeaderTableDatabase";
+import {User} from "../../../interfaces/User";
 
 @Component({
   selector: 'app-custom-table',
