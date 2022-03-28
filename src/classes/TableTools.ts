@@ -9,6 +9,7 @@ export class TableTools<T> {
   errorMessage: string = '';
   dataSize!: number;
   action: Actions = {};
+  totalActions!: number;
 
   shiftOrder(state: number): number {
     return (state+1)%3;

@@ -8,4 +8,10 @@ export interface TableUtility<T> {
 
   attachActions(object: T[]): void;
 
+  delete(id: number): void;
+
+  updateList(id: number): void;
+
+  move(id: number): void;
+
 }

@@ -17,7 +17,7 @@
                  resetAllOthersOrderType(tableDbHeaders, header.headerTable)"></fa-icon>
       </th>
     </ng-container>
-    <th>Actions</th>
+    <th [attr.colspan]="numberOfActions">Actions</th>
   </tr>
   </thead>
   <tbody>
@@ -25,8 +25,8 @@
     <td *ngFor="let field of mappingFunction(item) | keyvalue: keyObjectOrder" colspan="2">
       {{ field.value }}
     </td>
-    <td *ngFor="let action of item.actions" [attr.colspan]="item.actions.length">
-      <button (click)="action.execute('str')">Add</button>
+    <td *ngFor="let action of item.actions">
+      <button [ngClass]="['btn', 'btn-primary']" (click)="action.execute(item)">{{action.name}}</button>
     </td>
   </tr>
   </tbody>

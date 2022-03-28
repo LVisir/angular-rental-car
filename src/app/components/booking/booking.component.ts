@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {BookingService} from "../../services/booking.service";
 import {Booking} from "../../../interfaces/Booking";
 import {TableTools} from "../../../classes/TableTools";
 import {TableUtility} from "../../../interfaces/TableUtility";
 import {HeaderTableDatabase} from "../../../interfaces/HeaderTableDatabase";
 import {Actions} from "../../../interfaces/Actions";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-booking',
@@ -13,7 +14,7 @@ import {Actions} from "../../../interfaces/Actions";
 })
 export class BookingComponent extends TableTools<Booking> implements OnInit, TableUtility<Booking> {
 
-  constructor(private bookingService: BookingService) {
+  constructor(private bookingService: BookingService, private router: Router) {
     super();
   }
 
@@ -26,7 +27,7 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
         this.attachActions(bookings);
         this.currentPage = bookings.length > 0 ? 1 : 0;
         this.currentPages = this.getCurrentPages(bookings.length);
-        this.dataSize = Math.floor(bookings.length/10);
+        this.dataSize = Math.floor(bookings.length / 10);
       },
       error: err => {
         this.errorMessage = err.error.error;
@@ -86,24 +87,65 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
 
   attachActions(object: Booking[]): void {
 
-    this.action = {
-      name: 'Add',
-      execute(obj: any) {
-        console.log('it works');
+    const deleteBooking = (id: number) => {
+      this.delete(id)
+    }
+
+    const updateBookingsList = (id: number) => {
+      this.updateList(id)
+    }
+
+    const moveToUpdatePage = (id: number) => {
+      this.move(id)
+    }
+
+    let action2 = this.action = {
+      name: 'Delete',
+      execute(obj: Booking) {
+        if (obj.idBooking !== undefined) {
+          deleteBooking(obj.idBooking)
+          updateBookingsList(obj.idBooking)
+        }
+      },
+      type: 'OnPlace'
+    }
+
+    let action3 = this.action = {
+      name: 'Edit',
+      async execute(obj: Booking) {
+        if (obj.idBooking !== undefined) {
+          await moveToUpdatePage(obj.idBooking)
+        }
       },
       type: 'Move'
     }
 
     let actions: Actions[] = [
-      {...this.action}
+      {...action2}, {...action3}
     ]
 
     object.map(x => {
       this.list.push({...x, actions: actions})
     })
 
-    console.log(object)
+    this.totalActions = actions.length
 
+  }
+
+  delete(id: number): void {
+    this.bookingService.deleteBooking(id).subscribe({
+      error: err => console.log(err)
+    })
+  }
+
+  updateList(id: number): void {
+    this.list = this.list.filter(x => {
+      return x.idBooking !== id && x
+    })
+  }
+
+  move(id: number): void {
+    this.router.navigate(['/bookings/update-booking', id])
   }
 
 

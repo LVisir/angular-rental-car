@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../services/user.service';
-import { User } from '../../../interfaces/User';
+import {Component, OnInit} from '@angular/core';
+import {UserService} from '../../services/user.service';
+import {User} from '../../../interfaces/User';
 import {TableUtility} from "../../../interfaces/TableUtility";
 import {TableTools} from "../../../classes/TableTools";
 import {HeaderTableDatabase} from "../../../interfaces/HeaderTableDatabase";
 import {Actions} from "../../../interfaces/Actions";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-users',
@@ -13,7 +14,7 @@ import {Actions} from "../../../interfaces/Actions";
 })
 export class UsersComponent extends TableTools<User> implements OnInit, TableUtility<User> {
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private router: Router) {
     super();
   }
 
@@ -26,7 +27,7 @@ export class UsersComponent extends TableTools<User> implements OnInit, TableUti
         this.attachActions(users);
         this.currentPage = users.length > 0 ? 1 : 0;
         this.currentPages = this.getCurrentPages(users.length);
-        this.dataSize = Math.floor(users.length/10);
+        this.dataSize = Math.floor(users.length / 10);
       },
       error: err => {
         this.errorMessage = err.error.error;
@@ -88,22 +89,65 @@ export class UsersComponent extends TableTools<User> implements OnInit, TableUti
 
   attachActions(object: User[]): void {
 
-    this.action = {
-      name: 'Add',
-      execute(obj: any) {
-        console.log('it works');
+    const deleteUser = (id: number) => {
+      this.delete(id)
+    }
+
+    const updateUsersList = (id: number) => {
+      this.updateList(id)
+    }
+
+    const moveToUpdatePage = (id: number) => {
+      this.move(id)
+    }
+
+    let action2 = this.action = {
+      name: 'Delete',
+      execute(obj: User) {
+        if (obj.idUser !== undefined) {
+          deleteUser(obj.idUser)
+          updateUsersList(obj.idUser)
+        }
+      },
+      type: 'OnPlace'
+    }
+
+    let action3 = this.action = {
+      name: 'Edit',
+      execute(obj: User) {
+        if (obj.idUser !== undefined) {
+          moveToUpdatePage(obj.idUser)
+        }
       },
       type: 'Move'
     }
 
     let actions: Actions[] = [
-      {...this.action}
+      {...action2}, {...action3}
     ]
 
     object.map(x => {
       this.list.push({...x, actions: actions})
     })
 
+    this.totalActions = actions.length
+
+  }
+
+  delete(id: number): void {
+    this.userService.deleteUser(id).subscribe({
+      error: err => console.log(err)
+    })
+  }
+
+  updateList(id: number): void {
+    this.list = this.list.filter(x => {
+      return x.idUser !== id && x
+    })
+  }
+
+  move(id: number): void {
+    this.router.navigate(['/users/update-user', id])
   }
 
 }

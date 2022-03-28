@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Vehicle} from "../../../interfaces/Vehicle";
 import {VehicleService} from "../../services/vehicle.service";
 import {TableTools} from "../../../classes/TableTools";
@@ -17,6 +17,8 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
     super();
   }
 
+  console = console;
+
   ngOnInit(): void {
     this.dbHeader = ['licensePlate', 'model', 'typology', 'manufacturer', 'registrYear', 'idVehicle'];
 
@@ -26,7 +28,7 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
           this.attachActions(vehicles);
           super.currentPage = vehicles.length > 0 ? 1 : 0;
           super.currentPages = this.getCurrentPages(vehicles.length);
-          this.dataSize = Math.floor(vehicles.length/10);
+          this.dataSize = Math.floor(vehicles.length / 10);
         },
         error: err => {
           this.errorMessage = err.error.error;
@@ -35,7 +37,7 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
 
   }
 
-  mapping(vehicle: Vehicle): Map<any,any> {
+  mapping(vehicle: Vehicle): Map<any, any> {
     const mapObj = new Map();
     mapObj.set('licensePlate', vehicle.licensePlate);
     mapObj.set('model', vehicle.model);
@@ -89,24 +91,58 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
 
   attachActions(object: Vehicle[]): void {
 
-    this.action = {
-      name: 'Add',
-      execute(obj: any) {
-        console.log('it works');
+    const deleteVehicle = (id: number) => {
+      this.delete(id)
+    }
+
+    const updateVehiclesList = (id: number) => {
+      this.updateList(id)
+    }
+
+    let action2 = this.action = {
+      name: 'Delete',
+      execute(obj: Vehicle) {
+        if (obj.idVehicle !== undefined) {
+          deleteVehicle(obj.idVehicle)
+          updateVehiclesList(obj.idVehicle)
+        }
+      },
+      type: 'OnPlace'
+    }
+
+    let action3 = this.action = {
+      name: 'Edit',
+      execute(obj: Vehicle) {
+        console.log(obj.idVehicle);
       },
       type: 'Move'
     }
 
     let actions: Actions[] = [
-      {...this.action}
+      {...action2}, {...action3}
     ]
 
     object.map(x => {
       this.list.push({...x, actions: actions})
     })
 
-    console.log(object)
+    this.totalActions = actions.length;
 
+  }
+
+  delete(id: number): void {
+    this.vehicleService.deleteVehicle(id).subscribe({
+      error: err => console.log(err)
+    })
+  }
+
+  updateList(id: number): void {
+    this.list = this.list.filter(x => {
+      return x.idVehicle !== id && x
+    })
+  }
+
+  move(id: number): void {
   }
 
 }

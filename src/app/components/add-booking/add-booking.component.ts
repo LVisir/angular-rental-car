@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import {BookingService} from "../../services/booking.service";
 
 @Component({
   selector: 'app-add-booking',
@@ -8,14 +9,20 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class AddBookingComponent implements OnInit {
 
-  string!: string | null;
+  string!: string;
 
-  constructor(private _Activatedroute:ActivatedRoute) {
+  constructor(private _Activatedroute:ActivatedRoute, private bookingService: BookingService) {
   }
 
   ngOnInit(): void {
     this._Activatedroute.paramMap.subscribe((x) => {
-      this.string = x.get('id');
+      if(x.get('id') !== null) {
+        this.bookingService.getBooking(parseInt(<string>x.get('id'))).subscribe({
+          next: value => {
+
+          }
+        })
+      }
     })
   }
 
