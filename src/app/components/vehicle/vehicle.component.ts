@@ -32,7 +32,12 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
           this.dataSize = Math.floor(vehicles.length / 10);
         },
         error: err => {
-          this.errorMessage = err.error.error;
+          if(err.error !== null && err.error.error) {
+            this.errorMessage = err.error.error;
+          }
+          else{
+            this.errorMessage = 'Internal Server Error'
+          }
         }
       })
 

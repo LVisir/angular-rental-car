@@ -22,6 +22,8 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
 
     this.dbHeader = ['idBooking', 'start', 'end', 'user', 'vehicle', 'approval'];
 
+    this.errorMessage = ''
+
     this.bookingService.getBookings().subscribe({
       next: bookings => {
         this.attachActions(bookings);
@@ -30,7 +32,12 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
         this.dataSize = Math.floor(bookings.length / 10);
       },
       error: err => {
-        this.errorMessage = err.error.error;
+        if(err.error !== null && err.error.error) {
+          this.errorMessage = err.error.error;
+        }
+        else{
+          this.errorMessage = 'Internal Server Error'
+        }
       }
     });
 

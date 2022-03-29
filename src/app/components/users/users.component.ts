@@ -30,7 +30,12 @@ export class UsersComponent extends TableTools<User> implements OnInit, TableUti
         this.dataSize = Math.floor(users.length / 10);
       },
       error: err => {
-        this.errorMessage = err.error.error;
+        if(err.error !== null && err.error.error) {
+          this.errorMessage = err.error.error;
+        }
+        else{
+          this.errorMessage = 'Internal Server Error'
+        }
       }
     });
 
