@@ -121,8 +121,10 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
     }
 
     let actions: Actions[] = [
-      {...action2}, {...action3}
+      {...action2}
     ]
+
+    actions.push({...action3})
 
     object.map(x => {
       this.list.push({...x, actions: actions})

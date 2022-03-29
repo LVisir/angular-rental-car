@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import {UserService} from "../../services/user.service";
 import {User} from "../../../interfaces/User";
 import {ActivatedRoute, Router} from "@angular/router";
-import {BookingService} from "../../services/booking.service";
+import {Error} from "../../../classes/Error";
 
 @Component({
   selector: 'app-update-user',
   templateUrl: './update-user.component.html',
   styleUrls: ['./update-user.component.css']
 })
-export class UpdateUserComponent implements OnInit {
+export class UpdateUserComponent extends Error implements OnInit {
 
   name!: string;
   surname!: string;
@@ -19,7 +19,9 @@ export class UpdateUserComponent implements OnInit {
   cf!: string;
   user!: User;
 
-  constructor(private userService: UserService, private _Activatedroute:ActivatedRoute, private bookingService: BookingService, private router: Router) { }
+  constructor(private userService: UserService, private _Activatedroute:ActivatedRoute, private router: Router) {
+    super();
+  }
 
   ngOnInit(): void {
     this._Activatedroute.paramMap.subscribe(x => {
@@ -55,7 +57,7 @@ export class UpdateUserComponent implements OnInit {
           this.router.navigate(['/', 'users'])
         },
         error: err => {
-          console.log(err.error)
+          this.manageError(err)
         }
       })
     }

@@ -5,6 +5,7 @@ import {TableTools} from "../../../classes/TableTools";
 import {TableUtility} from "../../../interfaces/TableUtility";
 import {HeaderTableDatabase} from "../../../interfaces/HeaderTableDatabase";
 import {Actions} from "../../../interfaces/Actions";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-vehicle',
@@ -13,7 +14,7 @@ import {Actions} from "../../../interfaces/Actions";
 })
 export class VehicleComponent extends TableTools<Vehicle> implements OnInit, TableUtility<Vehicle> {
 
-  constructor(private vehicleService: VehicleService) {
+  constructor(private vehicleService: VehicleService, private router: Router) {
     super();
   }
 
@@ -99,6 +100,10 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
       this.updateList(id)
     }
 
+    const moveToUpdatePage = (id: number) => {
+      this.move(id)
+    }
+
     let action2 = this.action = {
       name: 'Delete',
       execute(obj: Vehicle) {
@@ -113,7 +118,9 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
     let action3 = this.action = {
       name: 'Edit',
       execute(obj: Vehicle) {
-        console.log(obj.idVehicle);
+        if (obj.idVehicle !== undefined) {
+          moveToUpdatePage(obj.idVehicle)
+        }
       },
       type: 'Move'
     }
@@ -143,6 +150,7 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
   }
 
   move(id: number): void {
+    this.router.navigate(['/vehicles/update-vehicle', id])
   }
 
 }

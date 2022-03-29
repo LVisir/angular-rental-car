@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../../interfaces/User';
+import {UserModel} from "../models/user.model";
+import jwt_decode from "jwt-decode";
 
 /* `LoginToken ${sessionStorage.getItem('tokenJWT')}` */
 
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-type': 'application/json',
-    'Authorization': `LoginToken eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlZG9hcmRvLmFhYWJAZW1haWwuY29tIiwicm9sZXMiOlsiU1VQRVJVU0VSIl19.av2j08OkgamTi_4_H0H02MsJdEwvVYNeWq-a-bm0q8s`
+    'Authorization': `LoginToken ${sessionStorage.getItem('tokenJWT')}`
   }),
 };
 
@@ -39,6 +41,10 @@ export class UserService {
     return this.http.get<User>(this.apiUrl+`/${id}`, httpOptions);
   }
 
+  getUserByEmail(email: string, httpHeader: {headers: HttpHeaders}): Observable<User> {
+    return this.http.get<User>(this.apiUrl+`/email/${email}`, httpHeader);
+  }
+
   insertUser(user: User): Observable<User> {
     return this.http.post<User>(this.apiUrl+`/addUser`, user, httpOptions);
   }
@@ -53,6 +59,10 @@ export class UserService {
 
   searchCustomersBy(field: String, value: String): Observable<User[]> {
     return this.http.get<User[]>(this.apiUrl+`/customers/normalSearch?field=${field}&value=${value}`, httpOptions);
+  }
+
+  getUserModel(token: any): UserModel {
+    return jwt_decode(token) as UserModel
   }
 
 }

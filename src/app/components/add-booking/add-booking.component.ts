@@ -14,20 +14,6 @@ export class AddBookingComponent implements OnInit {
   constructor(private _Activatedroute:ActivatedRoute, private bookingService: BookingService) {
   }
 
-  ngOnInit(): void {
-    this._Activatedroute.paramMap.subscribe((x) => {
-      if(x.get('id') !== null) {
-        this.bookingService.getBooking(parseInt(<string>x.get('id'))).subscribe({
-          next: value => {
-
-          }
-        })
-      }
-    })
-  }
-
-  onClick(): void{
-    console.log(this.string);
-  }
+  ngOnInit(): void {}
 
 }

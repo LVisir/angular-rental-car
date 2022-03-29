@@ -2,19 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {BookingService} from "../../services/booking.service";
 import {Booking} from "../../../interfaces/Booking";
+import {Error} from "../../../classes/Error";
 
 @Component({
   selector: 'app-update-booking',
   templateUrl: './update-booking.component.html',
   styleUrls: ['./update-booking.component.css']
 })
-export class UpdateBookingComponent implements OnInit {
+export class UpdateBookingComponent extends Error implements OnInit {
 
   startDate!: string;
   endDate!: string;
   booking!: Booking;
 
-  constructor(private _Activatedroute:ActivatedRoute, private bookingService: BookingService, private router: Router) { }
+  constructor(private _Activatedroute:ActivatedRoute, private bookingService: BookingService, private router: Router) {
+    super();
+  }
 
   ngOnInit(): void {
     this._Activatedroute.paramMap.subscribe((x) => {
@@ -42,7 +45,7 @@ export class UpdateBookingComponent implements OnInit {
           this.router.navigate(['/', 'bookings'])
         },
         error: err => {
-          console.log(err)
+          this.manageError(err)
         }
       })
 

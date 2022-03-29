@@ -1,1 +1,29 @@
-<p>update-vehicle works!</p>
+<app-error *ngFor="let error of validationError" [message]="error"></app-error>
+<app-error *ngFor="let error of error" [message]="error"></app-error>
+<form (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for="licensePlate">Licence plate</label>
+    <input type="text" class="form-control" id="licensePlate" name="licensePlate" [(ngModel)]="licensePlate">
+  </div>
+  <div class="form-group">
+    <label for="manufacturer">Manufacturer</label>
+    <input type="text" class="form-control" id="manufacturer" name="manufacturer" [(ngModel)]="manufacturer">
+  </div>
+  <div class="form-group">
+    <label for="model">Model</label>
+    <input type="text" class="form-control" id="model" name="model" [(ngModel)]="model">
+  </div>
+  <div class="form-group">
+    <label for="typology">Typology</label>
+    <select class="form-control" id="typology" name="typology" [(ngModel)]="typology">
+      <option>SUV</option>
+      <option>MINIVAN</option>
+      <option>COMPACT</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="registrYear">Year of registration</label>
+    <input type="date" class="form-control" id="registrYear" name="registrYear" [(ngModel)]="registrYear">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

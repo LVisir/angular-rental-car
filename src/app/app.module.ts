@@ -26,15 +26,19 @@ import { VehicleComponent } from './components/vehicle/vehicle.component';
 import { UpdateBookingComponent } from './components/update-booking/update-booking.component';
 import { UpdateUserComponent } from './components/update-user/update-user.component';
 import { UpdateVehicleComponent } from './components/update-vehicle/update-vehicle.component';
+import { ErrorComponent } from './components/error/error.component';
+import {HasRoleGuard} from "./has-role.guard";
 
 // route path for components
 const appRoutes: Routes = [
+  {path: '', component: LoginComponent},
   {path: 'bookings', component: BookingComponent},
   {path: 'bookings/update-booking/:id', component: UpdateBookingComponent},
-  {path: 'users', component: UsersComponent},
-  {path: 'users/update-user/:id', component: UpdateUserComponent},
+  {path: 'bookings/add-booking/:idVehicle', component: AddBookingComponent, canActivate: [HasRoleGuard], data: { role: 'customer'}},
+  {path: 'users', component: UsersComponent, canActivate: [HasRoleGuard], data: { role: 'superuser'}},
+  {path: 'users/update-user/:id', component: UpdateUserComponent, canActivate: [HasRoleGuard], data: { role: 'superuser'}},
   {path: 'vehicles', component: VehicleComponent},
-  {path: 'vehicle/update-vehicle/:id', component: UpdateVehicleComponent}
+  {path: 'vehicles/update-vehicle/:id', component: UpdateVehicleComponent, canActivate: [HasRoleGuard], data: { role: 'superuser'}}
 ]
 
 @NgModule({
@@ -49,7 +53,8 @@ const appRoutes: Routes = [
     VehicleComponent,
     UpdateBookingComponent,
     UpdateUserComponent,
-    UpdateVehicleComponent
+    UpdateVehicleComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
