@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from "../../services/user.service";
 import {Router} from "@angular/router";
-import { map } from 'rxjs/operators';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -39,7 +39,9 @@ export class LoginComponent implements OnInit {
 
         sessionStorage.setItem('tokenJWT', user.access_token)
 
-        this.userService.getUserByEmail(userModel.sub).subscribe(next => this.userService.setUserObservable(next.idUser))
+        this.userService.getUserByEmail(userModel.sub).subscribe(next => this.userService.setUserObservable({
+          id: next.idUser
+        }))
 
         return '/bookings'
       }))

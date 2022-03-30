@@ -7,6 +7,7 @@ import {HeaderTableDatabase} from "../../../interfaces/HeaderTableDatabase";
 import {Actions} from "../../../interfaces/Actions";
 import {Router} from "@angular/router";
 import {UserService} from "../../services/user.service";
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-booking',
@@ -21,7 +22,13 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
 
   ngOnInit(): void {
 
-    this.userService.getUserObservable().subscribe(next => console.log(next))
+    this.userService.getUserObservable()
+      .pipe(map(value => {
+        return value
+      }))
+      .subscribe(next => {
+        next.id !== null && console.log(next)
+      })
 
     this.dbHeader = ['idBooking', 'start', 'end', 'user', 'vehicle', 'approval'];
 
