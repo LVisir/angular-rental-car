@@ -1,18 +1,7 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Booking} from "../../interfaces/Booking";
-import {UserService} from "./user.service";
-import {User} from '../../interfaces/User'
-
-/*`LoginToken ${sessionStorage.getItem('tokenJWT')}`*/
-
-let httpOptions = {
-  headers: new HttpHeaders({
-    'Content-type': 'application/json',
-    'Authorization': `LoginToken ${sessionStorage.getItem('tokenJWT')}`
-  }),
-};
 
 @Injectable({
   providedIn: 'root'
@@ -21,57 +10,41 @@ export class BookingService {
 
   private apiUrl = 'http://localhost:8091/bookings';
 
-  private apiUrlCustomer = 'http://localhost:8091/bookings/customers' + `/email/${sessionStorage.getItem('customer')}`
-
-  constructor(private http: HttpClient, private userService: UserService) {
+  constructor(private http: HttpClient) {
   }
 
   getBookings(): Observable<Booking[]> {
-    /*const checkSession = httpOptions.headers.get('Authorization')
-    const token = sessionStorage.getItem('tokenJWT')
-    if (checkSession !== null && token !== null) {
-      if (!checkSession.includes(token)) {
-        httpOptions = {
-          headers: new HttpHeaders({
-            'Content-type': 'application/json',
-            'Authorization': `LoginToken ${sessionStorage.getItem('tokenJWT')}`
-          }),
-        };
-      }
-    }
-
-
-    console.log(this.apiUrl)*/
 
     if (sessionStorage.getItem('customer') !== null) {
-      return this.http.get<Booking[]>(this.apiUrlCustomer);
+      return this.http.get<Booking[]>(this.apiUrl + '/customers' + `/email/${sessionStorage.getItem('customer')}`);
     } else {
       return this.http.get<Booking[]>(this.apiUrl);
     }
+
   }
 
   getBooking(id: number): Observable<Booking> {
-    return this.http.get<Booking>(this.apiUrl + `/${id}`, httpOptions);
+    return this.http.get<Booking>(this.apiUrl + `/${id}`);
   }
 
   insertBooking(booking: Booking): Observable<Booking> {
-    return this.http.post<Booking>(this.apiUrl + `/add`, booking, httpOptions);
+    return this.http.post<Booking>(this.apiUrl + `/add`, booking);
   }
 
   updateBooking(booking: Booking, id: number): Observable<Booking> {
-    return this.http.put<Booking>(this.apiUrl + `/update/${id}`, booking, httpOptions);
+    return this.http.put<Booking>(this.apiUrl + `/update/${id}`, booking);
   }
 
   deleteBooking(id: number): Observable<any> {
-    return this.http.delete<any>(this.apiUrl + `/delete/${id}`, httpOptions);
+    return this.http.delete<any>(this.apiUrl + `/delete/${id}`);
   }
 
   getBookingOfUser(id: number): Observable<Booking[]> {
-    return this.http.get<Booking[]>(this.apiUrl + `/customers/${id}`, httpOptions);
+    return this.http.get<Booking[]>(this.apiUrl + `/customers/${id}`);
   }
 
   searchBookingsBy(field: String, value: String): Observable<Booking[]> {
-    return this.http.get<Booking[]>(this.apiUrl + `/search?field=${field}&value=${value}`, httpOptions);
+    return this.http.get<Booking[]>(this.apiUrl + `/search?field=${field}&value=${value}`);
   }
 
 }
