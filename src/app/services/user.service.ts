@@ -33,7 +33,6 @@ export class UserService {
     id: null
   })
 
-
   get userId(): number {
     return <number>this._userId;
   }
@@ -50,7 +49,9 @@ export class UserService {
     return this.userIdObservable.next(value)
   }
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient) {
+    this.setUserObservable({id: sessionStorage.getItem('userId')})
+  }
 
   login(credentials: string): Observable<any> {
     return this.http.post<any>('http://localhost:8091/login', credentials);

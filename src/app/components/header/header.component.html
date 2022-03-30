@@ -17,6 +17,6 @@
         </ng-container>
       </li>
     </ul>
-    <app-button [color]="'brown'" [classType]="['btn', 'btn-primary']" [text]="'Logout'"></app-button>
+    <app-button (buttonClick)="logout()" [color]="'brown'" [classType]="['btn', 'btn-primary']" [text]="'Logout'"></app-button>
   </div>
 </nav>

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from "../../services/user.service";
 import {Router} from "@angular/router";
-import {map} from 'rxjs/operators';
+import {concatMap, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -43,11 +43,17 @@ export class LoginComponent implements OnInit {
           id: next.idUser
         }))
 
-        return '/bookings'
+        return userModel
+      }))
+      .pipe(concatMap(value => {
+        return this.userService.getUserByEmail(value.sub)
+      }))
+      .pipe(map(value => {
+        value.idUser!== undefined && sessionStorage.setItem('userId', String(value.idUser))
       }))
       .subscribe({
-        next: pathToGo => {
-          this.router.navigate([pathToGo])
+        next: () => {
+          this.router.navigate(['/bookings'])
         },
         error: () => {
           this.errorMessage = 'Internal server error'
