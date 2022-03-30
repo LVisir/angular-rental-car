@@ -30,7 +30,7 @@ export class UserService {
   constructor(private http:HttpClient) { }
 
   login(credentials: string): Observable<any> {
-    return this.http.post<any>('http://localhost:8091/login', credentials, httpLogin);
+    return this.http.post<any>('http://localhost:8091/login', credentials);
   }
 
   getUsers(): Observable<User[]> {
@@ -41,7 +41,7 @@ export class UserService {
     return this.http.get<User>(this.apiUrl+`/${id}`, httpOptions);
   }
 
-  getUserByEmail(email: string, httpHeader: {headers: HttpHeaders}): Observable<User> {
+  getUserByEmail(email: string | null, httpHeader: {headers: HttpHeaders}): Observable<User> {
     return this.http.get<User>(this.apiUrl+`/email/${email}`, httpHeader);
   }
 

@@ -27,39 +27,29 @@ export class LoginComponent implements OnInit {
       .pipe(map((user) => {
         let userModel = this.userService.getUserModel(user.access_token)
 
-        this.userService.getUserByEmail(this.email, {
-          headers: new HttpHeaders({
-            'Content-type': 'application/json',
-            'Authorization': `LoginToken ${user.access_token}`
-          }),
-        }).subscribe({
-          next: value => {
-            switch (userModel.roles[0]) {
-              case 'SUPERUSER':
-                value.idUser && sessionStorage.setItem('superuser', String(value.idUser))
-                break
-              case 'CUSTOMER':
-                value.idUser && sessionStorage.setItem('customer', String(value.idUser))
-                break
-            }
-          },
-          error: () => {
-            throw new Error('')
-          }
-        })
+        switch (userModel.roles[0]) {
+          case 'SUPERUSER':
+            userModel.sub && sessionStorage.setItem('superuser', userModel.sub)
+            break
+          case 'CUSTOMER':
+            userModel.sub && sessionStorage.setItem('customer', userModel.sub)
+            break
+        }
 
         sessionStorage.setItem('tokenJWT', user.access_token)
 
         return '/bookings'
       }))
       .subscribe({
-        next: pathTogo => {
-          this.router.navigate([pathTogo])
+        next: pathToGo => {
+          this.router.navigate([pathToGo])
         },
         error: () => {
-          this.errorMessage = 'Some credentials are wrong'
+          this.errorMessage = 'Internal server error'
         }
       })
+
+
   }
 
 }

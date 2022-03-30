@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Booking} from "../../interfaces/Booking";
 import {UserService} from "./user.service";
+import {User} from '../../interfaces/User'
 
 /*`LoginToken ${sessionStorage.getItem('tokenJWT')}`*/
 
@@ -20,11 +21,13 @@ export class BookingService {
 
   private apiUrl = 'http://localhost:8091/bookings';
 
+  private apiUrlCustomer = 'http://localhost:8091/bookings/customers' + `/email/${sessionStorage.getItem('customer')}`
+
   constructor(private http: HttpClient, private userService: UserService) {
   }
 
   getBookings(): Observable<Booking[]> {
-    const checkSession = httpOptions.headers.get('Authorization')
+    /*const checkSession = httpOptions.headers.get('Authorization')
     const token = sessionStorage.getItem('tokenJWT')
     if (checkSession !== null && token !== null) {
       if (!checkSession.includes(token)) {
@@ -37,7 +40,14 @@ export class BookingService {
       }
     }
 
-    return this.http.get<Booking[]>(this.apiUrl, httpOptions);
+
+    console.log(this.apiUrl)*/
+
+    if (sessionStorage.getItem('customer') !== null) {
+      return this.http.get<Booking[]>(this.apiUrlCustomer);
+    } else {
+      return this.http.get<Booking[]>(this.apiUrl);
+    }
   }
 
   getBooking(id: number): Observable<Booking> {
