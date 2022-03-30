@@ -26,14 +26,28 @@ export class LoginComponent implements OnInit {
     this.userService.login(`email=${this.email}&password=${this.password}`)
       .pipe(map((user) => {
         let userModel = this.userService.getUserModel(user.access_token)
-        switch (userModel.roles[0]) {
-          case 'SUPERUSER':
-            sessionStorage.setItem('superuser', this.email)
-            break
-          case 'CUSTOMER':
-            sessionStorage.setItem('customer', this.email)
-            break
-        }
+
+        this.userService.getUserByEmail(this.email, {
+          headers: new HttpHeaders({
+            'Content-type': 'application/json',
+            'Authorization': `LoginToken ${user.access_token}`
+          }),
+        }).subscribe({
+          next: value => {
+            switch (userModel.roles[0]) {
+              case 'SUPERUSER':
+                value.idUser && sessionStorage.setItem('superuser', String(value.idUser))
+                break
+              case 'CUSTOMER':
+                value.idUser && sessionStorage.setItem('customer', String(value.idUser))
+                break
+            }
+          },
+          error: () => {
+            throw new Error('')
+          }
+        })
+
         sessionStorage.setItem('tokenJWT', user.access_token)
 
         return '/bookings'
