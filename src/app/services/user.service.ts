@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import { User } from '../../interfaces/User';
 import {UserModel} from "../models/user.model";
 import jwt_decode from "jwt-decode";
@@ -29,6 +29,10 @@ export class UserService {
 
   private _userId?: number;
 
+  private userIdObservable = new BehaviorSubject<any>({
+    id: null
+  })
+
 
   get userId(): number {
     return <number>this._userId;
@@ -36,6 +40,14 @@ export class UserService {
 
   set userId(value: number | undefined) {
     this._userId = value;
+  }
+
+  getUserObservable() {
+    return this.userIdObservable.asObservable()
+  }
+
+  setUserObservable(value: any) {
+    return this.userIdObservable.next(value)
   }
 
   constructor(private http:HttpClient) { }

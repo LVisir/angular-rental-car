@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
 
         sessionStorage.setItem('tokenJWT', user.access_token)
 
-        this.userService.getUserByEmail(userModel.sub).subscribe(next => this.userService.userId = next.idUser)
+        this.userService.getUserByEmail(userModel.sub).subscribe(next => this.userService.setUserObservable(next.idUser))
 
         return '/bookings'
       }))

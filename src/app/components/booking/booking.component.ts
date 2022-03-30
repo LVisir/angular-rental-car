@@ -21,6 +21,8 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
 
   ngOnInit(): void {
 
+    this.userService.getUserObservable().subscribe(next => console.log(next))
+
     this.dbHeader = ['idBooking', 'start', 'end', 'user', 'vehicle', 'approval'];
 
     this.errorMessage = ''
