@@ -29,6 +29,8 @@ import {UpdateVehicleComponent} from './components/update-vehicle/update-vehicle
 import {ErrorComponent} from './components/error/error.component';
 import {HasRoleGuard} from "./has-role.guard";
 import {HeadersInterceptor} from "./interceptors/headers.interceptor";
+import { HeaderComponent } from './components/header/header.component';
+import { WrongPageComponent } from './components/wrong-page/wrong-page.component';
 
 // route path for components
 const appRoutes: Routes = [
@@ -54,7 +56,8 @@ const appRoutes: Routes = [
     component: UpdateVehicleComponent,
     canActivate: [HasRoleGuard],
     data: {role: 'superuser'}
-  }
+  },
+  {path: 'wrong-page', component: WrongPageComponent}
 ]
 
 @NgModule({
@@ -70,7 +73,9 @@ const appRoutes: Routes = [
     UpdateBookingComponent,
     UpdateUserComponent,
     UpdateVehicleComponent,
-    ErrorComponent
+    ErrorComponent,
+    HeaderComponent,
+    WrongPageComponent
   ],
   imports: [
     BrowserModule,

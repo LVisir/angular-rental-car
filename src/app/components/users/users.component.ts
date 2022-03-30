@@ -30,10 +30,11 @@ export class UsersComponent extends TableTools<User> implements OnInit, TableUti
         this.dataSize = Math.floor(users.length / 10);
       },
       error: err => {
-        if(err.error !== null && err.error.error) {
+        if (err.status && err.status === 403) {
+          this.router.navigate(['/wrong-page'], {replaceUrl: true})
+        } else if (err.error !== null && err.error.error) {
           this.errorMessage = err.error.error;
-        }
-        else{
+        } else {
           this.errorMessage = 'Internal Server Error'
         }
       }
@@ -114,7 +115,8 @@ export class UsersComponent extends TableTools<User> implements OnInit, TableUti
           updateUsersList(obj.idUser)
         }
       },
-      type: 'OnPlace'
+      type: 'OnPlace',
+      color: 'MediumSlateBlue'
     }
 
     let action3 = this.action = {
@@ -124,12 +126,14 @@ export class UsersComponent extends TableTools<User> implements OnInit, TableUti
           moveToUpdatePage(obj.idUser)
         }
       },
-      type: 'Move'
+      type: 'Move',
+      color: 'MediumSlateBlue'
     }
 
-    let actions: Actions[] = [
-      {...action2}, {...action3}
-    ]
+    let actions: Actions[] = []
+
+    actions.push({...action2})
+    actions.push({...action3})
 
     object.map(x => {
       this.list.push({...x, actions: actions})

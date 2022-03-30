@@ -1,3 +1,20 @@
+<div class="container-fluid">
+  <section id="photoArray">
+    <div>
+      <h3>{{title}}</h3>
+    </div>
+    <div></div>
+    <div class="input-group justify-content-end">
+      <div id="search-autocomplete" class="form-outline">
+        <input type="search" id="form1" class="form-control" />
+      </div>
+     <!-- <button type="button" class="btn btn-primary">
+        Search
+      </button>-->
+      <app-button [color]="'green'" [classType]="['btn', 'btn-primary']" [text]="'Search'"></app-button>
+    </div>
+  </section>
+</div>
 <table class="table table-striped table-bordered table-hover">
   <thead>
   <tr [ngStyle]="{textAlign: 'center'}">
@@ -26,7 +43,7 @@
       {{ field.value }}
     </td>
     <td *ngFor="let action of item.actions">
-      <button [ngClass]="['btn', 'btn-primary']" (click)="action.execute(item)">{{action.name}}</button>
+      <app-button [color]="action.color" [text]="action.name" [classType]="['btn', 'btn-primary']" (buttonClick)="action.execute(item)"></app-button>
     </td>
   </tr>
   </tbody>

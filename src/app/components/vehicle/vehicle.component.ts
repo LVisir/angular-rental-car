@@ -6,6 +6,7 @@ import {TableUtility} from "../../../interfaces/TableUtility";
 import {HeaderTableDatabase} from "../../../interfaces/HeaderTableDatabase";
 import {Actions} from "../../../interfaces/Actions";
 import {Router} from "@angular/router";
+import {BookingService} from "../../services/booking.service";
 
 @Component({
   selector: 'app-vehicle',
@@ -14,7 +15,7 @@ import {Router} from "@angular/router";
 })
 export class VehicleComponent extends TableTools<Vehicle> implements OnInit, TableUtility<Vehicle> {
 
-  constructor(private vehicleService: VehicleService, private router: Router) {
+  constructor(private vehicleService: VehicleService, private router: Router, private bookingService: BookingService) {
     super();
   }
 
@@ -32,7 +33,10 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
           this.dataSize = Math.floor(vehicles.length / 10);
         },
         error: err => {
-          if(err.error !== null && err.error.error) {
+          if(err.status && err.status === 403){
+            this.router.navigate(['/wrong-page'], {replaceUrl: true})
+          }
+          else if(err.error !== null && err.error.error) {
             this.errorMessage = err.error.error;
           }
           else{
@@ -109,6 +113,21 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
       this.move(id)
     }
 
+    const moveToAddBookingPage = (vehicleId: number) => {
+      this.router.navigate(['bookings/add-booking', vehicleId])
+    }
+
+    let action1 = this.action = {
+      name: 'Rent',
+      execute(obj: Vehicle) {
+        if (obj.idVehicle !== undefined) {
+          moveToAddBookingPage(obj.idVehicle)
+        }
+      },
+      type: 'Move',
+      color: 'MediumSlateBlue'
+    }
+
     let action2 = this.action = {
       name: 'Delete',
       execute(obj: Vehicle) {
@@ -117,7 +136,8 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
           updateVehiclesList(obj.idVehicle)
         }
       },
-      type: 'OnPlace'
+      type: 'OnPlace',
+      color: 'MediumSlateBlue'
     }
 
     let action3 = this.action = {
@@ -127,12 +147,19 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
           moveToUpdatePage(obj.idVehicle)
         }
       },
-      type: 'Move'
+      type: 'Move',
+      color: 'MediumSlateBlue'
     }
 
-    let actions: Actions[] = [
-      {...action2}, {...action3}
-    ]
+    let actions: Actions[] = []
+
+    if (sessionStorage.getItem('superuser') !== null) {
+      actions.push({...action2})
+      actions.push({...action3})
+    }
+    else if(sessionStorage.getItem('customer') !== null) {
+      actions.push({...action1})
+    }
 
     object.map(x => {
       this.list.push({...x, actions: actions})

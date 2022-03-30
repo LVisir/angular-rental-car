@@ -6,6 +6,7 @@ import {TableUtility} from "../../../interfaces/TableUtility";
 import {HeaderTableDatabase} from "../../../interfaces/HeaderTableDatabase";
 import {Actions} from "../../../interfaces/Actions";
 import {Router} from "@angular/router";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-booking',
@@ -14,7 +15,7 @@ import {Router} from "@angular/router";
 })
 export class BookingComponent extends TableTools<Booking> implements OnInit, TableUtility<Booking> {
 
-  constructor(private bookingService: BookingService, private router: Router) {
+  constructor(private bookingService: BookingService, private router: Router, private userService: UserService) {
     super();
   }
 
@@ -32,10 +33,11 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
         this.dataSize = Math.floor(bookings.length / 10);
       },
       error: err => {
-        if(err.error !== null && err.error.error) {
+        if (err.status && err.status === 403) {
+          this.router.navigate(['/wrong-page'], {replaceUrl: true})
+        } else if (err.error !== null && err.error.error) {
           this.errorMessage = err.error.error;
-        }
-        else{
+        } else {
           this.errorMessage = 'Internal Server Error'
         }
       }
@@ -114,7 +116,8 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
           updateBookingsList(obj.idBooking)
         }
       },
-      type: 'OnPlace'
+      type: 'OnPlace',
+      color: 'MediumSlateBlue'
     }
 
     let action3 = this.action = {
@@ -124,13 +127,13 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
           await moveToUpdatePage(obj.idBooking)
         }
       },
-      type: 'Move'
+      type: 'Move',
+      color: 'MediumSlateBlue'
     }
 
-    let actions: Actions[] = [
-      {...action2}
-    ]
+    let actions: Actions[] = []
 
+    actions.push({...action2})
     actions.push({...action3})
 
     object.map(x => {

@@ -27,6 +27,17 @@ export class UserService {
 
   private apiUrl = 'http://localhost:8091/users';
 
+  private _userId?: number;
+
+
+  get userId(): number {
+    return <number>this._userId;
+  }
+
+  set userId(value: number | undefined) {
+    this._userId = value;
+  }
+
   constructor(private http:HttpClient) { }
 
   login(credentials: string): Observable<any> {
@@ -41,8 +52,8 @@ export class UserService {
     return this.http.get<User>(this.apiUrl+`/${id}`, httpOptions);
   }
 
-  getUserByEmail(email: string | null, httpHeader: {headers: HttpHeaders}): Observable<User> {
-    return this.http.get<User>(this.apiUrl+`/email/${email}`, httpHeader);
+  getUserByEmail(email: string | null): Observable<User> {
+    return this.http.get<User>(this.apiUrl+`/email/${email}`);
   }
 
   insertUser(user: User): Observable<User> {

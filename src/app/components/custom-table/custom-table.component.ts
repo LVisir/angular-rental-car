@@ -33,6 +33,7 @@ export class CustomTableComponent implements OnInit {
   @Input() sortMethod!: (arr: any[], keyArr: string[], reverse: boolean) => any[];
   @Input() changeOrderState!: (state: number) => number;
   @Input() numberOfActions!: number;
+  @Input() title!: string;
 
   resetAllOthersOrderType(headerTableDb: HeaderTableDatabase[], name: string): void {
     for(let key in headerTableDb){

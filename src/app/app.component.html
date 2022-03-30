@@ -1,4 +1,4 @@
+<app-header *ngIf="sessionStorage.getItem('tokenJWT') !== null" [paths]="navbarElements"></app-header>
 <div class="container my-5">
-  <!--<app-login></app-login>-->
   <router-outlet></router-outlet>
 </div>

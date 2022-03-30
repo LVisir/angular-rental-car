@@ -2,6 +2,8 @@ import {Actions} from "../interfaces/Actions";
 
 export class TableTools<T> {
 
+  sessionStorage = sessionStorage
+
   currentPages: number[] = [];
   currentPage!: number;
   list: T[] = [];

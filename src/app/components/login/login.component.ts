@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {UserService} from "../../services/user.service";
 import {Router} from "@angular/router";
 import { map } from 'rxjs/operators';
-import {HttpHeaders} from "@angular/common/http";
 
 @Component({
   selector: 'app-login',
@@ -10,6 +9,8 @@ import {HttpHeaders} from "@angular/common/http";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+
+  sessionStorage = sessionStorage
 
   email!: string;
   password!: string;
@@ -37,6 +38,8 @@ export class LoginComponent implements OnInit {
         }
 
         sessionStorage.setItem('tokenJWT', user.access_token)
+
+        this.userService.getUserByEmail(userModel.sub).subscribe(next => this.userService.userId = next.idUser)
 
         return '/bookings'
       }))

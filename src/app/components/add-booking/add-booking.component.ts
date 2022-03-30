@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {BookingService} from "../../services/booking.service";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-add-booking',
@@ -11,9 +12,13 @@ export class AddBookingComponent implements OnInit {
 
   string!: string;
 
-  constructor(private _Activatedroute:ActivatedRoute, private bookingService: BookingService) {
+  constructor(private _Activatedroute:ActivatedRoute, private bookingService: BookingService, private userService: UserService) {
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this._Activatedroute.paramMap.subscribe(next => console.log(next.get('idVehicle')))
+
+
+  }
 
 }

@@ -1,17 +1,19 @@
-<app-error *ngIf="errorMessage" [message]="errorMessage"></app-error>
-<h3>Vehicles</h3>
-<app-custom-table
-  [mappingFunction]="mapping"
-  [keyObjectOrder]="returnZero"
-  [list]="list"
-  [currentPage]="currentPage"
-  [currentPages]="currentPages"
-  [dataSize]="dataSize"
-  [forward]="forward"
-  [backward]="backward"
-  [changePage]="changePage"
-  [sortMethod]="sort"
-  [tableDbHeaders]="tableDbHeader"
-  [changeOrderState]="shiftOrder"
-  [numberOfActions]="totalActions"
-></app-custom-table>
+<ng-container *ngIf="sessionStorage.getItem('tokenJWT') !== null">
+  <app-error *ngIf="errorMessage" [message]="errorMessage"></app-error>
+  <app-custom-table
+    [mappingFunction]="mapping"
+    [keyObjectOrder]="returnZero"
+    [list]="list"
+    [currentPage]="currentPage"
+    [currentPages]="currentPages"
+    [dataSize]="dataSize"
+    [forward]="forward"
+    [backward]="backward"
+    [changePage]="changePage"
+    [sortMethod]="sort"
+    [tableDbHeaders]="tableDbHeader"
+    [changeOrderState]="shiftOrder"
+    [numberOfActions]="totalActions"
+    [title]="'Vehicles'"
+  ></app-custom-table>
+</ng-container>

@@ -5,4 +5,6 @@ export interface Actions {
 
   execute?(obj: any): void;
 
+  color?: string
+
 }
