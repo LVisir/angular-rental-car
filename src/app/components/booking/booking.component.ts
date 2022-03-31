@@ -102,48 +102,60 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
 
   attachActions(object: Booking[]): void {
 
-    const deleteBooking = (id: number) => {
-      this.delete(id)
+    const approveBooking = (booking: Booking) => {
+      this.approves(booking)
     }
 
-    const updateBookingsList = (id: number) => {
-      this.updateList(id)
+    const updtBooking = (updtBooking: Booking) => {
+      this.updateBooking(updtBooking)
     }
 
-    const moveToUpdatePage = (id: number) => {
-      this.move(id)
+    let action1 = this.action = {
+      name: 'Approves',
+      execute(obj: Booking) {
+        approveBooking(obj)
+        updtBooking(obj)
+        this.disable = true
+      },
+      type: 'OnPlace',
+      color: 'MediumSlateBlue',
+      disable: false
     }
 
     let action2 = this.action = {
       name: 'Delete',
-      execute(obj: Booking) {
-        if (obj.idBooking !== undefined) {
-          deleteBooking(obj.idBooking)
-          updateBookingsList(obj.idBooking)
-        }
+      execute: (obj: Booking) => {
+        this.delete(<number>obj.idBooking)
+        this.updateList(<number>obj.idBooking)
       },
       type: 'OnPlace',
-      color: 'MediumSlateBlue'
+      color: 'MediumSlateBlue',
+      disable: false
     }
 
     let action3 = this.action = {
       name: 'Edit',
-      async execute(obj: Booking) {
-        if (obj.idBooking !== undefined) {
-          await moveToUpdatePage(obj.idBooking)
-        }
+      execute: async (obj: Booking) => {
+        this.move(<number>obj.idBooking)
       },
       type: 'Move',
-      color: 'MediumSlateBlue'
+      color: 'MediumSlateBlue',
+      disable: false
     }
 
     let actions: Actions[] = []
 
+    if(sessionStorage.getItem('superuser') !== null) {
+      actions.push({...action1})
+    }
     actions.push({...action2})
     actions.push({...action3})
 
     object.map(x => {
-      this.list.push({...x, actions: actions})
+      if(sessionStorage.getItem('superuser') !== null) {
+        actions[0] = {...actions[0], disable: x.approval}
+      }
+      this.list.push({...x, actions: [...actions]})
     })
 
     this.totalActions = actions.length
@@ -164,6 +176,21 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
 
   move(id: number): void {
     this.router.navigate(['/bookings/update-booking', id])
+  }
+
+  approves(booking: Booking): void {
+    this.bookingService.updateBooking({...booking, approval: true}, <number>booking.idBooking)
+      .subscribe({
+        error: err => {
+          console.log(err)
+        }
+      })
+  }
+
+  updateBooking(updtBooking: Booking): void {
+    this.list = this.list.map((booking) => {
+      return booking.idBooking !== updtBooking.idBooking ? booking : updtBooking
+    })
   }
 
 

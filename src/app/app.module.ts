@@ -29,33 +29,53 @@ import {UpdateVehicleComponent} from './components/update-vehicle/update-vehicle
 import {ErrorComponent} from './components/error/error.component';
 import {HasRoleGuard} from "./has-role.guard";
 import {HeadersInterceptor} from "./interceptors/headers.interceptor";
-import { HeaderComponent } from './components/header/header.component';
-import { WrongPageComponent } from './components/wrong-page/wrong-page.component';
+import {HeaderComponent} from './components/header/header.component';
+import {WrongPageComponent} from './components/wrong-page/wrong-page.component';
 
 // route path for components
 const appRoutes: Routes = [
   {path: '', component: LoginComponent},
-  {path: 'bookings', component: BookingComponent},
-  {path: 'bookings/update-booking/:id', component: UpdateBookingComponent},
+  {
+    path: 'bookings',
+    component: BookingComponent,
+    canActivate: [HasRoleGuard],
+    data: {role: ['CUSTOMER', 'SUPERUSER']}
+  },
+  {
+    path: 'bookings/update-booking/:id',
+    component: UpdateBookingComponent,
+    canActivate: [HasRoleGuard],
+    data: {role: ['CUSTOMER', 'SUPERUSER']}
+  },
   {
     path: 'bookings/add-booking/:idVehicle',
     component: AddBookingComponent,
     canActivate: [HasRoleGuard],
-    data: {role: 'customer'}
+    data: {role: ['CUSTOMER']}
   },
-  {path: 'users', component: UsersComponent, canActivate: [HasRoleGuard], data: {role: 'superuser'}},
+  {
+    path: 'users',
+    component: UsersComponent,
+    canActivate: [HasRoleGuard],
+    data: {role: ['SUPERUSER']}
+  },
   {
     path: 'users/update-user/:id',
     component: UpdateUserComponent,
     canActivate: [HasRoleGuard],
-    data: {role: 'superuser'}
+    data: {role: ['SUPERUSER']}
   },
-  {path: 'vehicles', component: VehicleComponent},
+  {
+    path: 'vehicles',
+    component: VehicleComponent,
+    canActivate: [HasRoleGuard],
+    data: {role: ['CUSTOMER', 'SUPERUSER']}
+  },
   {
     path: 'vehicles/update-vehicle/:id',
     component: UpdateVehicleComponent,
     canActivate: [HasRoleGuard],
-    data: {role: 'superuser'}
+    data: {role: ['SUPERUSER']}
   },
   {path: 'wrong-page', component: WrongPageComponent}
 ]

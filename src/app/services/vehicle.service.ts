@@ -41,8 +41,8 @@ export class VehicleService {
     return this.http.post<Vehicle>(this.apiUrl+`/add`, vehicle, httpOptions);
   }
 
-  getLastBookingDateOfVehicle(idBooking: number, idCustomer: number): Observable<any> {
-    return this.http.get(this.apiUrl+`/lastBooking?booking=${idBooking}&customer=${idCustomer}`)
+  getLastBookingDateOfVehicle(idVehicle: number, idCustomer: number): Observable<any> {
+    return this.http.get(this.apiUrl+`/lastBooking?booking=${idVehicle}&customer=${idCustomer}`)
   }
 
   searchVehiclesBy(field: String, value: String): Observable<Vehicle[]> {

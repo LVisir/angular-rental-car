@@ -30,7 +30,8 @@ export class UserService {
   private _userId?: number;
 
   private userIdObservable = new BehaviorSubject<any>({
-    id: null
+    id: null,
+    role: []
   })
 
   get userId(): number {
@@ -50,7 +51,7 @@ export class UserService {
   }
 
   constructor(private http:HttpClient) {
-    this.setUserObservable({id: sessionStorage.getItem('userId')})
+    sessionStorage.getItem('tokenJWT') !== null && this.setUserObservable({id: sessionStorage.getItem('userId'), role: this.getUserModel(sessionStorage.getItem('tokenJWT')).roles})
   }
 
   login(credentials: string): Observable<any> {

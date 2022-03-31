@@ -95,39 +95,25 @@ export class UsersComponent extends TableTools<User> implements OnInit, TableUti
 
   attachActions(object: User[]): void {
 
-    const deleteUser = (id: number) => {
-      this.delete(id)
-    }
-
-    const updateUsersList = (id: number) => {
-      this.updateList(id)
-    }
-
-    const moveToUpdatePage = (id: number) => {
-      this.move(id)
-    }
-
     let action2 = this.action = {
       name: 'Delete',
-      execute(obj: User) {
-        if (obj.idUser !== undefined) {
-          deleteUser(obj.idUser)
-          updateUsersList(obj.idUser)
-        }
+      execute: (obj: User) => {
+        this.delete(<number>obj.idUser)
+        this.updateList(<number>obj.idUser)
       },
       type: 'OnPlace',
-      color: 'MediumSlateBlue'
+      color: 'MediumSlateBlue',
+      disable: false
     }
 
     let action3 = this.action = {
       name: 'Edit',
-      execute(obj: User) {
-        if (obj.idUser !== undefined) {
-          moveToUpdatePage(obj.idUser)
-        }
+      execute: (obj: User) => {
+        this.move(<number>obj.idUser)
       },
       type: 'Move',
-      color: 'MediumSlateBlue'
+      color: 'MediumSlateBlue',
+      disable: false
     }
 
     let actions: Actions[] = []

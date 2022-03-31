@@ -43,7 +43,7 @@
       {{ field.value }}
     </td>
     <td *ngFor="let action of item.actions">
-      <app-button [color]="action.color" [text]="action.name" [classType]="['btn', 'btn-primary']" (buttonClick)="action.execute(item)"></app-button>
+      <app-button [disable]="action.disable" [color]="action.color" [text]="action.name" [classType]="['btn', 'btn-primary']" (buttonClick)="action.execute(item)"></app-button>
     </td>
   </tr>
   </tbody>

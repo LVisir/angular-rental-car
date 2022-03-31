@@ -101,51 +101,31 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
 
   attachActions(object: Vehicle[]): void {
 
-    const deleteVehicle = (id: number) => {
-      this.delete(id)
-    }
-
-    const updateVehiclesList = (id: number) => {
-      this.updateList(id)
-    }
-
-    const moveToUpdatePage = (id: number) => {
-      this.move(id)
-    }
-
-    const moveToAddBookingPage = (vehicleId: number) => {
-      this.router.navigate(['bookings/add-booking', vehicleId])
-    }
-
     let action1 = this.action = {
       name: 'Rent',
-      execute(obj: Vehicle) {
-        if (obj.idVehicle !== undefined) {
-          moveToAddBookingPage(obj.idVehicle)
-        }
+      execute: (obj: Vehicle) => {
+        this.router.navigate(['bookings/add-booking', <number>obj.idVehicle])
       },
       type: 'Move',
-      color: 'MediumSlateBlue'
+      color: 'MediumSlateBlue',
+      disable: false
     }
 
     let action2 = this.action = {
       name: 'Delete',
-      execute(obj: Vehicle) {
-        if (obj.idVehicle !== undefined) {
-          deleteVehicle(obj.idVehicle)
-          updateVehiclesList(obj.idVehicle)
-        }
+      execute: (obj: Vehicle) => {
+        this.delete(<number>obj.idVehicle)
+        this.updateList(<number>obj.idVehicle)
       },
       type: 'OnPlace',
-      color: 'MediumSlateBlue'
+      color: 'MediumSlateBlue',
+      disable: false
     }
 
     let action3 = this.action = {
       name: 'Edit',
-      execute(obj: Vehicle) {
-        if (obj.idVehicle !== undefined) {
-          moveToUpdatePage(obj.idVehicle)
-        }
+      execute: (obj: Vehicle) => {
+        this.move(<number>obj.idVehicle)
       },
       type: 'Move',
       color: 'MediumSlateBlue'

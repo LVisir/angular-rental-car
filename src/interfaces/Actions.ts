@@ -3,8 +3,9 @@ export interface Actions {
   name?: string;
   type?: string;
 
-  execute?(obj: any): void;
+  execute?: (obj: any) => void;
 
-  color?: string
+  color?: string;
+  disable?: boolean;
 
 }

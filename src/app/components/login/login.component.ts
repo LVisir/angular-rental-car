@@ -40,7 +40,8 @@ export class LoginComponent implements OnInit {
         sessionStorage.setItem('tokenJWT', user.access_token)
 
         this.userService.getUserByEmail(userModel.sub).subscribe(next => this.userService.setUserObservable({
-          id: next.idUser
+          id: next.idUser,
+          role: userModel.roles
         }))
 
         return userModel

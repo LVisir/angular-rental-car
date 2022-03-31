@@ -1,1 +1,13 @@
-<p>It works</p>
+<app-error *ngFor="let error of validationError" [message]="error"></app-error>
+<app-error *ngFor="let error of error" [message]="error"></app-error>
+<form (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for="start">First date possible</label>
+    <input type="date" class="form-control" id="start" name="start" [(ngModel)]="start">
+  </div>
+  <div class="form-group">
+    <label for="end">End date</label>
+    <input type="date" class="form-control" id="end" name="end" [(ngModel)]="end">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

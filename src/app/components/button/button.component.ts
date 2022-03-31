@@ -11,7 +11,9 @@ export class ButtonComponent implements OnInit {
   @Input() color: string | undefined;
   @Input() classType: string[] | undefined;
   @Input() buttonType: string | undefined;
+  @Input() disable!: boolean;
   @Output() buttonClick = new EventEmitter();
+  console = console
 
   constructor() { }
 
