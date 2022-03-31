@@ -15,5 +15,7 @@
     [changeOrderState]="shiftOrder"
     [numberOfActions]="totalActions"
     [title]="'Vehicles'"
+    [search]="search.bind(this)"
+    [reset]="reset.bind(this)"
   ></app-custom-table>
 </ng-container>

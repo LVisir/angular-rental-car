@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import { faAngleDown, faFilter, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import {HeaderTableDatabase} from "../../../interfaces/HeaderTableDatabase";
 import {User} from "../../../interfaces/User";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-custom-table',
@@ -15,6 +16,8 @@ export class CustomTableComponent implements OnInit {
   faAngleUp = faAngleUp;
 
   str: string = '-idBooking';
+
+  searchBox!: string;
 
   console = console;
 
@@ -34,6 +37,8 @@ export class CustomTableComponent implements OnInit {
   @Input() changeOrderState!: (state: number) => number;
   @Input() numberOfActions!: number;
   @Input() title!: string;
+  @Input() search!: (field: string, value: string) => void;
+  @Input() reset!: () => void;
 
   resetAllOthersOrderType(headerTableDb: HeaderTableDatabase[], name: string): void {
     for(let key in headerTableDb){

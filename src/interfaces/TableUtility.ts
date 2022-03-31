@@ -14,4 +14,8 @@ export interface TableUtility<T> {
 
   move(id: number): void;
 
+  search(field: string, value: string): void;
+
+  reset(): void;
+
 }

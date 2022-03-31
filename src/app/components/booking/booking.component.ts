@@ -25,6 +25,22 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
     super();
   }
 
+  reset(): void {
+    this.bookingService.getBookings().subscribe({
+      next: bookings => {
+        this.list = []
+        this.attachActions(bookings);
+        this.currentPage = bookings.length > 0 ? 1 : 0;
+        this.currentPages = this.getCurrentPages(bookings.length);
+        this.dataSize = Math.floor(bookings.length / 10);
+        this.errorMessage = ''
+      },
+      error: () => {
+        this.errorMessage = 'No result/s found'
+      }
+    })
+  }
+
   ngOnInit(): void {
 
     this.dbHeader = ['idBooking', 'start', 'end', 'user', 'vehicle', 'approval'];
@@ -95,7 +111,7 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
     },
     {
       headerTable: 'Approval',
-      headerDb: ['Approval'],
+      headerDb: ['approval'],
       sortable: false
     },
   ]
@@ -145,14 +161,14 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
 
     let actions: Actions[] = []
 
-    if(sessionStorage.getItem('superuser') !== null) {
+    if (sessionStorage.getItem('superuser') !== null) {
       actions.push({...action1})
     }
     actions.push({...action2})
     actions.push({...action3})
 
     object.map(x => {
-      if(sessionStorage.getItem('superuser') !== null) {
+      if (sessionStorage.getItem('superuser') !== null) {
         actions[0] = {...actions[0], disable: x.approval}
       }
       this.list.push({...x, actions: [...actions]})
@@ -190,6 +206,20 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
   updateBooking(updtBooking: Booking): void {
     this.list = this.list.map((booking) => {
       return booking.idBooking !== updtBooking.idBooking ? booking : updtBooking
+    })
+  }
+
+  search(field: string, value: string): void {
+    this.bookingService.searchBookingsBy(field, value).subscribe({
+      next: bookings => {
+        this.list = []
+        this.attachActions(bookings)
+        this.errorMessage = this.list.length > 0 ? '' : this.errorMessage
+      },
+      error: err => {
+        this.errorMessage = 'No result/s from the search'
+        console.log(err)
+      }
     })
   }
 

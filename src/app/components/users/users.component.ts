@@ -145,4 +145,34 @@ export class UsersComponent extends TableTools<User> implements OnInit, TableUti
     this.router.navigate(['/users/update-user', id])
   }
 
+  search(field: string, value: string): void {
+    this.userService.searchCustomersBy(field, value).subscribe({
+      next: customers => {
+        this.list = []
+        this.attachActions(customers)
+        this.errorMessage = this.list.length >0 ? '' : this.errorMessage
+      },
+      error: err => {
+        this.errorMessage = 'No result/s from the search'
+        console.log(err)
+      }
+    })
+  }
+
+  reset(): void {
+    this.userService.getUsers().subscribe({
+      next: users => {
+        this.list = []
+        this.attachActions(users);
+        this.currentPage = users.length > 0 ? 1 : 0;
+        this.currentPages = this.getCurrentPages(users.length);
+        this.dataSize = Math.floor(users.length / 10);
+        this.errorMessage = ''
+      },
+      error: () => {
+        this.errorMessage = 'No result/s found'
+      }
+    })
+  }
+
 }

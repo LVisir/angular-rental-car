@@ -3,15 +3,23 @@
     <div>
       <h3>{{title}}</h3>
     </div>
-    <div></div>
+    <div class="btn justify-content-center">
+      <app-button [classType]="['btn', 'btn-secondary']" [text]="'Reset'" [color]="'DarkKhaki'" (buttonClick)="reset()" ></app-button>
+    </div>
     <div class="input-group justify-content-end">
       <div id="search-autocomplete" class="form-outline">
-        <input type="search" id="form1" class="form-control" />
+        <input type="search" id="form1" name="searchBox" [(ngModel)]="searchBox" class="form-control" />
       </div>
-     <!-- <button type="button" class="btn btn-primary">
-        Search
-      </button>-->
-      <app-button [color]="'green'" [classType]="['btn', 'btn-primary']" [text]="'Search'"></app-button>
+      <div class="btn-group">
+        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Search By
+        </button>
+        <div class="dropdown-menu dropdown-menu-right">
+          <ng-container *ngFor="let header of tableDbHeaders">
+            <app-button *ngIf="header.sortable" [classType]="['dropdown-item']" [text]="header.headerDb[0]" (buttonClick)="search(header.headerDb[0], searchBox); searchBox=''"></app-button>
+          </ng-container>
+        </div>
+      </div>
     </div>
   </section>
 </div>
@@ -24,7 +32,7 @@
         <fa-icon [icon]="faFilter" [ngStyle]="{'cursor': 'pointer'}" *ngIf="header.state===0"
                  (click)="header.state = changeOrderState(header.state);
                  list = sortMethod(list, header.headerDb, true);
-                 resetAllOthersOrderType(tableDbHeaders, header.headerTable)"></fa-icon>
+                 resetAllOthersOrderType(tableDbHeaders, header.headerTable);"></fa-icon>
         <fa-icon [icon]="faAngleDown" [ngStyle]="{'cursor': 'pointer'}" *ngIf="header.state===1"
                  (click)="header.state = changeOrderState(header.state);
                  list = sortMethod(list, header.headerDb, false);
@@ -64,4 +72,4 @@
   </nav>
 </div>
 
-<!--{{ console.log(sortMethod(list, ['idBooking'], true)) }}-->
+
