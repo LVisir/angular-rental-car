@@ -22,6 +22,10 @@ export class UsersComponent extends TableTools<User> implements OnInit, TableUti
 
     this.dbHeader = ['name', 'surname', 'birthDate', 'cf', 'email', 'idUser']
 
+    this.addPagePath = 'users/add-user'
+
+    this.errorMessage = ''
+
     this.userService.getUsers().subscribe({
       next: users => {
         this.attachActions(users);
@@ -139,6 +143,9 @@ export class UsersComponent extends TableTools<User> implements OnInit, TableUti
     this.list = this.list.filter(x => {
       return x.idUser !== id && x
     })
+    this.currentPages = this.getCurrentPages(this.list.length);
+    this.dataSize = Math.floor(this.list.length / 10);
+    this.currentPage = this.list.length > 0 ? 1 : 0
   }
 
   move(id: number): void {
@@ -151,6 +158,8 @@ export class UsersComponent extends TableTools<User> implements OnInit, TableUti
         this.list = []
         this.attachActions(customers)
         this.errorMessage = this.list.length >0 ? '' : this.errorMessage
+        this.currentPages = this.getCurrentPages(customers.length);
+        this.dataSize = Math.floor(customers.length / 10);
       },
       error: err => {
         this.errorMessage = 'No result/s from the search'
@@ -164,7 +173,6 @@ export class UsersComponent extends TableTools<User> implements OnInit, TableUti
       next: users => {
         this.list = []
         this.attachActions(users);
-        this.currentPage = users.length > 0 ? 1 : 0;
         this.currentPages = this.getCurrentPages(users.length);
         this.dataSize = Math.floor(users.length / 10);
         this.errorMessage = ''

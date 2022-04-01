@@ -12,11 +12,12 @@ import {Error} from "../../../classes/Error";
 export class UpdateVehicleComponent extends Error implements OnInit {
 
   vehicle!: Vehicle;
-  licensePlate!: string;
-  manufacturer!: string;
-  model!: string;
-  registrYear!: string;
-  typology!: string;
+  licensePlate: string = '';
+  manufacturer: string = '';
+  model: string = '';
+  registrYear: string = '';
+  typology: string = '';
+  idVehicle: string = '';
 
   constructor(private vehicleService: VehicleService, private _Activatedroute: ActivatedRoute, private router: Router) {
     super();
@@ -25,6 +26,7 @@ export class UpdateVehicleComponent extends Error implements OnInit {
   ngOnInit(): void {
     this._Activatedroute.paramMap.subscribe(x => {
       if (x.get('id') !== null) {
+        this.idVehicle = <string>x.get('id')
         this.vehicleService.getVehicle(parseInt(<string>x.get('id'))).subscribe({
           next: value => {
             this.vehicle = value
@@ -38,18 +40,21 @@ export class UpdateVehicleComponent extends Error implements OnInit {
             this.router.navigate(['/', 'vehicles'])
           }
         })
-      } else {
-        this.router.navigate(['/', 'vehicles'])
       }
     })
   }
 
   onSubmit() {
 
-    if (this.vehicle.idVehicle !== undefined) {
+    this.error = []
+    this.validationError = []
 
-      this.error = []
-      this.validationError = []
+    if(!this.licensePlate || !this.manufacturer || !this.model ||
+    !this.registrYear || !this.registrYear) {
+      this.error.push('Fill all the forms')
+    }
+
+    else if (this.idVehicle) {
 
       this.vehicle.licensePlate = this.licensePlate
       this.vehicle.manufacturer = this.manufacturer
@@ -57,7 +62,7 @@ export class UpdateVehicleComponent extends Error implements OnInit {
       this.vehicle.registrYear = this.registrYear
       this.vehicle.typology = this.typology
 
-      this.vehicleService.updateVehicle(this.vehicle, this.vehicle.idVehicle).subscribe({
+      this.vehicleService.updateVehicle(this.vehicle, <number>this.vehicle.idVehicle).subscribe({
         next: () => {
           this.router.navigate(['/', 'vehicles'])
         },
@@ -65,15 +70,25 @@ export class UpdateVehicleComponent extends Error implements OnInit {
           this.manageError(err)
         }
       })
-    }
-    else{
-      this.router.navigate(['/', 'vehicles'])
+    } else {
+      this.vehicleService.insertVehicle({
+        typology: this.typology,
+        model: this.model,
+        registrYear: this.registrYear,
+        manufacturer: this.manufacturer,
+        licensePlate: this.licensePlate,
+        actions: []
+      }).subscribe({
+        next: () => {
+          this.router.navigate(['/', 'vehicles'])
+        },
+        error: err => {
+          console.log(err)
+          this.manageError(err)
+        }
+      })
     }
 
-  }
-
-  focus(id: string) {
-    document.getElementById(id)?.focus()
   }
 
 }

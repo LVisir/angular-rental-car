@@ -66,6 +66,12 @@ const appRoutes: Routes = [
     data: {role: ['SUPERUSER']}
   },
   {
+    path: 'users/add-user',
+    component: UpdateUserComponent,
+    canActivate: [HasRoleGuard],
+    data: {role: ['SUPERUSER']}
+  },
+  {
     path: 'vehicles',
     component: VehicleComponent,
     canActivate: [HasRoleGuard],
@@ -73,6 +79,12 @@ const appRoutes: Routes = [
   },
   {
     path: 'vehicles/update-vehicle/:id',
+    component: UpdateVehicleComponent,
+    canActivate: [HasRoleGuard],
+    data: {role: ['SUPERUSER']}
+  },
+  {
+    path: 'vehicles/add-vehicle',
     component: UpdateVehicleComponent,
     canActivate: [HasRoleGuard],
     data: {role: ['SUPERUSER']}

@@ -22,6 +22,7 @@ export class HeaderComponent implements OnInit {
     sessionStorage.removeItem('customer')
     sessionStorage.removeItem('superuser')
     sessionStorage.removeItem('tokenJWT')
+    sessionStorage.removeItem('userId')
     this.router.navigate([''])
   }
 

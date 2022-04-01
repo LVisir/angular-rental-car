@@ -1,8 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { faAngleDown, faFilter, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import {HeaderTableDatabase} from "../../../interfaces/HeaderTableDatabase";
 import {User} from "../../../interfaces/User";
 import {UserService} from "../../services/user.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-custom-table',
@@ -23,6 +24,8 @@ export class CustomTableComponent implements OnInit {
 
   object = Object;
 
+  sessionStorage = sessionStorage
+
   @Input() mappingFunction!: (object: any) => Map<any, any>;
   @Input() keyObjectOrder!: () => number;
   @Input() forward!: (page: number, currentPages: number[], currentPage: number) => void;
@@ -39,6 +42,16 @@ export class CustomTableComponent implements OnInit {
   @Input() title!: string;
   @Input() search!: (field: string, value: string) => void;
   @Input() reset!: () => void;
+  @Output() handleErrorMessage = new EventEmitter<string>()
+  @Input() navigateTo!: string;
+
+  resetError() {
+    this.handleErrorMessage.emit('')
+  }
+
+  navigate() {
+    this.router.navigate([this.navigateTo])
+  }
 
   resetAllOthersOrderType(headerTableDb: HeaderTableDatabase[], name: string): void {
     for(let key in headerTableDb){
@@ -48,7 +61,7 @@ export class CustomTableComponent implements OnInit {
     }
   }
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
   }

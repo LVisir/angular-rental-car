@@ -44,6 +44,10 @@ export class BookingService {
   }
 
   searchBookingsBy(field: String, value: String): Observable<Booking[]> {
+
+    if(sessionStorage.getItem('customer') !== null){
+      return this.http.get<Booking[]>(this.apiUrl+'/customers'+`/${sessionStorage.getItem('userId')}` + `/search?field=${field}&value=${value}`);
+    }
     return this.http.get<Booking[]>(this.apiUrl + `/search?field=${field}&value=${value}`);
   }
 

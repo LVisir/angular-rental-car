@@ -24,6 +24,10 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
   ngOnInit(): void {
     this.dbHeader = ['licensePlate', 'model', 'typology', 'manufacturer', 'registrYear', 'idVehicle'];
 
+    this.addPagePath = 'vehicles/add-vehicle'
+
+    this.errorMessage = ''
+
     this.vehicleService.getVehicles()
       .subscribe({
         next: vehicles => {
@@ -171,6 +175,8 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
         this.list = []
         this.attachActions(vehicles)
         this.errorMessage = this.list.length >0 ? '' : this.errorMessage
+        super.currentPages = this.getCurrentPages(vehicles.length);
+        this.dataSize = Math.floor(vehicles.length / 10);
       },
       error: err => {
         this.errorMessage = 'No result/s from the search'
@@ -185,7 +191,6 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
         next: vehicles => {
           this.list = []
           this.attachActions(vehicles);
-          super.currentPage = vehicles.length > 0 ? 1 : 0;
           super.currentPages = this.getCurrentPages(vehicles.length);
           this.dataSize = Math.floor(vehicles.length / 10);
           this.errorMessage = ''

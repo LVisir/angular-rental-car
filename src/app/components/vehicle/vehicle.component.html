@@ -17,5 +17,7 @@
     [title]="'Vehicles'"
     [search]="search.bind(this)"
     [reset]="reset.bind(this)"
+    (handleErrorMessage)="setErrorMessage($event)"
+    [navigateTo]="addPagePath"
   ></app-custom-table>
 </ng-container>

@@ -1,29 +1,30 @@
 <div class="container-fluid">
   <section id="photoArray">
-    <div>
-      <h3>{{title}}</h3>
+    <div [ngStyle]="{'display': 'inline-block'}">
+      <span *ngIf="list.length>0"><h3>{{title}}</h3></span>
+      <span *ngIf="sessionStorage.getItem('superuser') !== null && list.length>0"><app-button [classType]="['btn', 'btn-primary']" [color]="'green'" [text]="'Add'" (buttonClick)="navigate()"></app-button></span>
     </div>
     <div class="btn justify-content-center">
-      <app-button [classType]="['btn', 'btn-secondary']" [text]="'Reset'" [color]="'DarkKhaki'" (buttonClick)="reset()" ></app-button>
+      <app-button [classType]="['btn', 'btn-secondary']" [text]="'Reset'" [color]="'DarkKhaki'" (buttonClick)="reset(); this.currentPage = 1; resetAllOthersOrderType(tableDbHeaders, '');" ></app-button>
     </div>
     <div class="input-group justify-content-end">
-      <div id="search-autocomplete" class="form-outline">
+      <div *ngIf="list.length>0" id="search-autocomplete" class="form-outline">
         <input type="search" id="form1" name="searchBox" [(ngModel)]="searchBox" class="form-control" />
       </div>
-      <div class="btn-group">
+      <div *ngIf="list.length>0" class="btn-group">
         <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Search By
         </button>
         <div class="dropdown-menu dropdown-menu-right">
           <ng-container *ngFor="let header of tableDbHeaders">
-            <app-button *ngIf="header.sortable" [classType]="['dropdown-item']" [text]="header.headerDb[0]" (buttonClick)="search(header.headerDb[0], searchBox); searchBox=''"></app-button>
+            <app-button *ngIf="header.sortable" [classType]="['dropdown-item']" [text]="header.headerDb[0]" (buttonClick)="search(header.headerDb[0], searchBox); searchBox=''; this.currentPage = 1;"></app-button>
           </ng-container>
         </div>
       </div>
     </div>
   </section>
 </div>
-<table class="table table-striped table-bordered table-hover">
+<table *ngIf="list.length>0" class="table table-striped table-bordered table-hover">
   <thead>
   <tr [ngStyle]="{textAlign: 'center'}">
     <ng-container *ngFor="let header of tableDbHeaders">
@@ -32,14 +33,17 @@
         <fa-icon [icon]="faFilter" [ngStyle]="{'cursor': 'pointer'}" *ngIf="header.state===0"
                  (click)="header.state = changeOrderState(header.state);
                  list = sortMethod(list, header.headerDb, true);
-                 resetAllOthersOrderType(tableDbHeaders, header.headerTable);"></fa-icon>
+                 resetAllOthersOrderType(tableDbHeaders, header.headerTable);
+                 resetError();"></fa-icon>
         <fa-icon [icon]="faAngleDown" [ngStyle]="{'cursor': 'pointer'}" *ngIf="header.state===1"
                  (click)="header.state = changeOrderState(header.state);
                  list = sortMethod(list, header.headerDb, false);
-                 resetAllOthersOrderType(tableDbHeaders, header.headerTable)"></fa-icon>
+                 resetAllOthersOrderType(tableDbHeaders, header.headerTable);
+                 resetError();"></fa-icon>
         <fa-icon [icon]="faAngleUp" [ngStyle]="{'cursor': 'pointer'}" *ngIf="header.state===2"
                  (click)="header.state = changeOrderState(header.state);
-                 resetAllOthersOrderType(tableDbHeaders, header.headerTable)"></fa-icon>
+                 resetAllOthersOrderType(tableDbHeaders, header.headerTable);
+                 resetError();"></fa-icon>
       </th>
     </ng-container>
     <th [attr.colspan]="numberOfActions">Actions</th>
@@ -56,17 +60,17 @@
   </tr>
   </tbody>
 </table>
-<div>
+<div *ngIf="list.length>0">
   <nav aria-label='Page navigation example'>
     <ul class='pagination justify-content-end'>
-      <li [ngClass]="{'page-item': true}" [class.disabled]="currentPages[0]===1" [ngStyle]="currentPages[0] === 1 ? {'cursor': 'default'} : {'cursor': 'pointer'}">
-      <button [ngClass]="{'page-link': true}" (click)="backward(currentPage, currentPages, currentPage)" >Previous</button>
+      <li [ngClass]="{'page-item': true}" [class.disabled]="currentPages[0]===1 || currentPages.length===0" [ngStyle]="currentPages[0] === 1 ? {'cursor': 'default'} : {'cursor': 'pointer'}">
+      <button [ngClass]="{'page-link': true}" (click)="backward(currentPage, currentPages, currentPage); resetError()" >Previous</button>
       </li>
       <li *ngFor="let page of currentPages" [ngClass]="{'page-item': true, 'active': currentPage===page}">
-        <button [ngClass]="{'page-link': true}" [ngStyle]="{'cursor': 'pointer'}" (click)="changePage(page)" >{{ page }}</button>
+        <button [ngClass]="{'page-link': true}" [ngStyle]="{'cursor': 'pointer'}" (click)="changePage(page); resetError()" >{{ page }}</button>
       </li>
-      <li [ngClass]="{'page-item': true}" [class.disabled]="currentPages[currentPages.length-1]===dataSize+1" [ngStyle]="{'cursor': currentPages[currentPages.length-1]===dataSize+1 ? 'default' : 'pointer'}">
-      <button [ngClass]="{'page-link': true}" [ngStyle]="{'cursor': 'pointer'}" (click)="forward(currentPage, currentPages, currentPage)">Next</button>
+      <li [ngClass]="{'page-item': true}" [class.disabled]="currentPages[currentPages.length-1]===dataSize+1 || currentPages.length===0" [ngStyle]="{'cursor': currentPages[currentPages.length-1]===dataSize+1 ? 'default' : 'pointer'}">
+      <button [ngClass]="{'page-link': true}" [ngStyle]="{'cursor': 'pointer'}" (click)="forward(currentPage, currentPages, currentPage); resetError()">Next</button>
       </li>
     </ul>
   </nav>

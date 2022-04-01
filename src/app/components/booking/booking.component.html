@@ -17,5 +17,6 @@
     [title]="'Bookings'"
     [search]="search.bind(this)"
     [reset]="reset.bind(this)"
+    (handleErrorMessage)="setErrorMessage($event)"
   ></app-custom-table>
 </ng-container>

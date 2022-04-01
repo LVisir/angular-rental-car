@@ -9,3 +9,11 @@
 /*#photoArray > div {
   border: 2px solid #1e7e34;
 }*/
+
+h3 {
+  display: inline-block;
+}
+
+span + span {
+  margin-left: 20px;
+}

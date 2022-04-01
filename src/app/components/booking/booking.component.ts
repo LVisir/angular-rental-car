@@ -30,7 +30,6 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
       next: bookings => {
         this.list = []
         this.attachActions(bookings);
-        this.currentPage = bookings.length > 0 ? 1 : 0;
         this.currentPages = this.getCurrentPages(bookings.length);
         this.dataSize = Math.floor(bookings.length / 10);
         this.errorMessage = ''
@@ -215,6 +214,8 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
         this.list = []
         this.attachActions(bookings)
         this.errorMessage = this.list.length > 0 ? '' : this.errorMessage
+        this.currentPages = this.getCurrentPages(bookings.length);
+        this.dataSize = Math.floor(bookings.length / 10);
       },
       error: err => {
         this.errorMessage = 'No result/s from the search'

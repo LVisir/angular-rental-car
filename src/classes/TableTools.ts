@@ -12,6 +12,11 @@ export class TableTools<T> {
   dataSize!: number;
   action: Actions = {};
   totalActions!: number;
+  addPagePath!: string;
+
+  setErrorMessage(message: string) {
+    this.errorMessage = message
+  }
 
   shiftOrder(state: number): number {
     return (state+1)%3;
