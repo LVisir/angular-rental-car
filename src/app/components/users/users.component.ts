@@ -34,7 +34,7 @@ export class UsersComponent extends TableTools<User> implements OnInit, TableUti
         this.dataSize = Math.floor(users.length / 10);
       },
       error: err => {
-        if (err.status && err.status === 403) {
+        if (err.status && err.status === 403) { // an unauthorized user try to access this page
           this.router.navigate(['/wrong-page'], {replaceUrl: true})
         } else if (err.error !== null && err.error.error) {
           this.errorMessage = err.error.error;
@@ -46,6 +46,7 @@ export class UsersComponent extends TableTools<User> implements OnInit, TableUti
 
   }
 
+  // implementation from TableUtility<T> interface
   mapping(user: User): Map<any, any> {
     const mapObj = new Map();
     mapObj.set('name', user.name);
@@ -97,6 +98,7 @@ export class UsersComponent extends TableTools<User> implements OnInit, TableUti
     },
   ]
 
+  // implementation from TableUtility<T> interface
   attachActions(object: User[]): void {
 
     let action2 = this.action = {
@@ -133,12 +135,14 @@ export class UsersComponent extends TableTools<User> implements OnInit, TableUti
 
   }
 
+  // implementation from TableUtility<T> interface
   delete(id: number): void {
     this.userService.deleteUser(id).subscribe({
       error: err => console.log(err)
     })
   }
 
+  // implementation from TableUtility<T> interface
   updateList(id: number): void {
     this.list = this.list.filter(x => {
       return x.idUser !== id && x
@@ -148,10 +152,12 @@ export class UsersComponent extends TableTools<User> implements OnInit, TableUti
     this.currentPage = this.list.length > 0 ? 1 : 0
   }
 
+  // implementation from TableUtility<T> interface
   move(id: number): void {
     this.router.navigate(['/users/update-user', id])
   }
 
+  // implementation from TableUtility<T> interface
   search(field: string, value: string): void {
     this.userService.searchCustomersBy(field, value).subscribe({
       next: customers => {
@@ -168,6 +174,7 @@ export class UsersComponent extends TableTools<User> implements OnInit, TableUti
     })
   }
 
+  // implementation from TableUtility<T> interface
   reset(): void {
     this.userService.getUsers().subscribe({
       next: users => {

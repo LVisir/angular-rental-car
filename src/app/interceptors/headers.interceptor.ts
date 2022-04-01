@@ -6,12 +6,11 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {UserService} from "../services/user.service";
 
 @Injectable()
 export class HeadersInterceptor implements HttpInterceptor {
 
-  constructor(private userService: UserService) {
+  constructor() {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -33,17 +32,5 @@ export class HeadersInterceptor implements HttpInterceptor {
     })
 
     return next.handle(modifiedRequest);
-  }
-
-  urlCustomer(url: string, customerId: string | null): string {
-    let s = url.split('/')
-    let result = ''
-    for (let x = 0; x < (s.length - 1); x++) {
-      result = result + s[x] + '/'
-    }
-    console.log('result ' + result)
-    result = result + 'customers' + '/' + customerId
-
-    return result
   }
 }

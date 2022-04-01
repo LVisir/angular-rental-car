@@ -6,7 +6,6 @@ import {TableUtility} from "../../../interfaces/TableUtility";
 import {HeaderTableDatabase} from "../../../interfaces/HeaderTableDatabase";
 import {Actions} from "../../../interfaces/Actions";
 import {Router} from "@angular/router";
-import {BookingService} from "../../services/booking.service";
 
 @Component({
   selector: 'app-vehicle',
@@ -15,11 +14,9 @@ import {BookingService} from "../../services/booking.service";
 })
 export class VehicleComponent extends TableTools<Vehicle> implements OnInit, TableUtility<Vehicle> {
 
-  constructor(private vehicleService: VehicleService, private router: Router, private bookingService: BookingService) {
+  constructor(private vehicleService: VehicleService, private router: Router) {
     super();
   }
-
-  console = console;
 
   ngOnInit(): void {
     this.dbHeader = ['licensePlate', 'model', 'typology', 'manufacturer', 'registrYear', 'idVehicle'];
@@ -37,6 +34,7 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
           this.dataSize = Math.floor(vehicles.length / 10);
         },
         error: err => {
+          // an unauthorized user try to access this page
           if(err.status && err.status === 403){
             this.router.navigate(['/wrong-page'], {replaceUrl: true})
           }
@@ -51,6 +49,7 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
 
   }
 
+  // implementation from TableUtility<T> interface
   mapping(vehicle: Vehicle): Map<any, any> {
     const mapObj = new Map();
     mapObj.set('licensePlate', vehicle.licensePlate);
@@ -103,6 +102,7 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
     },
   ]
 
+  // implementation from TableUtility<T> interface
   attachActions(object: Vehicle[]): void {
 
     let action1 = this.action = {
@@ -153,22 +153,26 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
 
   }
 
+  // implementation from TableUtility<T> interface
   delete(id: number): void {
     this.vehicleService.deleteVehicle(id).subscribe({
       error: err => console.log(err)
     })
   }
 
+  // implementation from TableUtility<T> interface
   updateList(id: number): void {
     this.list = this.list.filter(x => {
       return x.idVehicle !== id && x
     })
   }
 
+  // implementation from TableUtility<T> interface
   move(id: number): void {
     this.router.navigate(['/vehicles/update-vehicle', id])
   }
 
+  // implementation from TableUtility<T> interface
   search(field: string, value: string): void {
     this.vehicleService.searchVehiclesBy(field, value).subscribe({
       next: vehicles => {
@@ -185,6 +189,7 @@ export class VehicleComponent extends TableTools<Vehicle> implements OnInit, Tab
     })
   }
 
+  // implementation from TableUtility<T> interface
   reset(): void {
     this.vehicleService.getVehicles()
       .subscribe({

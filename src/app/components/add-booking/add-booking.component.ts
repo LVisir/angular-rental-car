@@ -5,9 +5,10 @@ import {UserService} from "../../services/user.service";
 import {VehicleService} from "../../services/vehicle.service";
 import {Vehicle} from "../../../interfaces/Vehicle";
 import {User} from "../../../interfaces/User";
-import {concatMap, map} from 'rxjs/operators';
+import {concatMap} from 'rxjs/operators';
 import {Error} from "../../../classes/Error";
 import {Booking} from "../../../interfaces/Booking";
+
 
 @Component({
   selector: 'app-add-booking',
@@ -16,9 +17,13 @@ import {Booking} from "../../../interfaces/Booking";
 })
 export class AddBookingComponent extends Error implements OnInit {
 
+  // url param
   vehicleId!: string | null;
+
   vehicle!: Vehicle;
   customer!: User;
+
+  // fields of Booking entity
   start!: string;
   end!: string;
 
@@ -31,8 +36,10 @@ export class AddBookingComponent extends Error implements OnInit {
 
   ngOnInit(): void {
 
+    // fetch param from url
     this._Activatedroute.paramMap.subscribe(next => this.vehicleId = next.get('idVehicle'))
 
+    // this component can be loaded only if an url param has been sent
     if(this.vehicleId === null) {
       this.router.navigate(['/bookings'])
     }
@@ -43,10 +50,12 @@ export class AddBookingComponent extends Error implements OnInit {
         }))
         .subscribe({
           next: value => {
+            // fill the form with the retrieved data
             this.start = value['startDate']
             this.end = value['endDate']
           },
           error: () => {
+            // a not valid vehicleId has been sent as a url param
             this.router.navigate(['/bookings'])
           }
         })
@@ -56,6 +65,7 @@ export class AddBookingComponent extends Error implements OnInit {
 
   onSubmit = () => {
 
+    // create the Booking to insert
     const booking: Booking = {
       actions: [],
       start: this.start,
@@ -74,6 +84,7 @@ export class AddBookingComponent extends Error implements OnInit {
         this.router.navigate(['/bookings'])
       },
       error: err => {
+        // violation of some constraint during the insert
         this.manageError(err)
       }
     })

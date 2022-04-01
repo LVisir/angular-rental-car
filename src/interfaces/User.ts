@@ -1,5 +1,8 @@
 import {Actions} from "./Actions";
 
+/**
+ * User entity of the DB
+ */
 export interface User{
   idUser?: number;
   name: string;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {BookingService} from "../../services/booking.service";
 import {Booking} from "../../../interfaces/Booking";
@@ -11,17 +11,20 @@ import {Error} from "../../../classes/Error";
 })
 export class UpdateBookingComponent extends Error implements OnInit {
 
+  // start and end date available
   startDate!: string;
   endDate!: string;
+
   booking!: Booking;
 
-  constructor(private _Activatedroute:ActivatedRoute, private bookingService: BookingService, private router: Router) {
+  constructor(private _Activatedroute: ActivatedRoute, private bookingService: BookingService, private router: Router) {
     super();
   }
 
   ngOnInit(): void {
     this._Activatedroute.paramMap.subscribe((x) => {
-      if(x.get('id') !== null) {
+      // this component can be access just by sending an url param with a Booking id
+      if (x.get('id') !== null) {
         this.bookingService.getBooking(parseInt(<string>x.get('id'))).subscribe({
           next: value => {
             this.startDate = value.start;
@@ -29,30 +32,23 @@ export class UpdateBookingComponent extends Error implements OnInit {
             this.booking = value;
           }
         })
-      }
-      else {
+      } else {
         this.router.navigate(['/', 'bookings'])
       }
     })
   }
 
   onSubmit(): void {
-    if(this.booking.idBooking !== undefined) {
-      this.booking.start = this.startDate;
-      this.booking.end = this.endDate;
-      this.bookingService.updateBooking(this.booking, this.booking.idBooking).subscribe({
-        next: () => {
-          this.router.navigate(['/', 'bookings'])
-        },
-        error: err => {
-          this.manageError(err)
-        }
-      })
-
-    }
-    else {
-      this.router.navigate(['/', 'bookings'])
-    }
+    this.booking.start = this.startDate;
+    this.booking.end = this.endDate;
+    this.bookingService.updateBooking(this.booking, <number>this.booking.idBooking).subscribe({
+      next: () => {
+        this.router.navigate(['/', 'bookings'])
+      },
+      error: err => {
+        this.manageError(err)
+      }
+    })
   }
 
 }

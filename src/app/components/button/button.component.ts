@@ -13,7 +13,6 @@ export class ButtonComponent implements OnInit {
   @Input() buttonType: string | undefined;
   @Input() disable!: boolean;
   @Output() buttonClick = new EventEmitter();
-  console = console
 
   constructor() { }
 

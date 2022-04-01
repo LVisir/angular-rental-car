@@ -6,13 +6,6 @@ import {TableUtility} from "../../../interfaces/TableUtility";
 import {HeaderTableDatabase} from "../../../interfaces/HeaderTableDatabase";
 import {Actions} from "../../../interfaces/Actions";
 import {Router} from "@angular/router";
-import {UserService} from "../../services/user.service";
-
-// for nested Observables
-import {concatMap} from "rxjs/operators";
-
-// to create fast Observables
-import {of} from "rxjs";
 
 @Component({
   selector: 'app-booking',
@@ -21,10 +14,11 @@ import {of} from "rxjs";
 })
 export class BookingComponent extends TableTools<Booking> implements OnInit, TableUtility<Booking> {
 
-  constructor(private bookingService: BookingService, private router: Router, private userService: UserService) {
+  constructor(private bookingService: BookingService, private router: Router) {
     super();
   }
 
+  // implementation from TableUtility<T> interface
   reset(): void {
     this.bookingService.getBookings().subscribe({
       next: bookings => {
@@ -55,6 +49,7 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
       },
       error: err => {
         if (err.status && err.status === 403) {
+          // an authorized user tried to access this component
           this.router.navigate(['/wrong-page'], {replaceUrl: true})
         } else if (err.error !== null && err.error.error) {
           this.errorMessage = err.error.error;
@@ -66,6 +61,7 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
 
   }
 
+  // implementation from TableUtility<T> interface
   mapping(booking: Booking): Map<any, any> {
     const mapObj = new Map()
     mapObj.set('idBooking', booking.idBooking);
@@ -115,6 +111,7 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
     },
   ]
 
+  // implementation from TableUtility<T> interface
   attachActions(object: Booking[]): void {
 
     const approveBooking = (booking: Booking) => {
@@ -177,22 +174,29 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
 
   }
 
+  // implementation from TableUtility<T> interface
   delete(id: number): void {
     this.bookingService.deleteBooking(id).subscribe({
       error: err => console.log(err)
     })
   }
 
+  // implementation from TableUtility<T> interface
   updateList(id: number): void {
     this.list = this.list.filter(x => {
       return x.idBooking !== id && x
     })
   }
 
+  // implementation from TableUtility<T> interface
   move(id: number): void {
     this.router.navigate(['/bookings/update-booking', id])
   }
 
+  /**
+   * Method of the SUPERUSER in which he can approve a Booking
+   * @param booking
+   */
   approves(booking: Booking): void {
     this.bookingService.updateBooking({...booking, approval: true}, <number>booking.idBooking)
       .subscribe({
@@ -204,10 +208,11 @@ export class BookingComponent extends TableTools<Booking> implements OnInit, Tab
 
   updateBooking(updtBooking: Booking): void {
     this.list = this.list.map((booking) => {
-      return booking.idBooking !== updtBooking.idBooking ? booking : updtBooking
+      return booking.idBooking !== updtBooking.idBooking ? booking : {...updtBooking, approval: true}
     })
   }
 
+  // implementation from TableUtility<T> interface
   search(field: string, value: string): void {
     this.bookingService.searchBookingsBy(field, value).subscribe({
       next: bookings => {

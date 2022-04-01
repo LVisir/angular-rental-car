@@ -2,7 +2,7 @@
   <section id="photoArray">
     <div [ngStyle]="{'display': 'inline-block'}">
       <span *ngIf="list.length>0"><h3>{{title}}</h3></span>
-      <span *ngIf="sessionStorage.getItem('superuser') !== null && list.length>0"><app-button [classType]="['btn', 'btn-primary']" [color]="'green'" [text]="'Add'" (buttonClick)="navigate()"></app-button></span>
+      <span *ngIf="sessionStorage.getItem('superuser') !== null && list.length>0 && navigateTo"><app-button [classType]="['btn', 'btn-primary']" [color]="'green'" [text]="'Add'" (buttonClick)="navigate()"></app-button></span>
     </div>
     <div class="btn justify-content-center">
       <app-button [classType]="['btn', 'btn-secondary']" [text]="'Reset'" [color]="'DarkKhaki'" (buttonClick)="reset(); this.currentPage = 1; resetAllOthersOrderType(tableDbHeaders, '');" ></app-button>
