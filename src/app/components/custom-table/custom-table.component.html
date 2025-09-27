@@ -5,7 +5,7 @@
       <span *ngIf="sessionStorage.getItem('superuser') !== null && list.length>0 && navigateTo"><app-button [classType]="['btn', 'btn-primary']" [color]="'green'" [text]="'Add'" (buttonClick)="navigate()"></app-button></span>
     </div>
     <div class="btn justify-content-center">
-      <app-button [classType]="['btn', 'btn-secondary']" [text]="'Reset'" [color]="'DarkKhaki'" (buttonClick)="reset(); this.currentPage = 1; resetAllOthersOrderType(tableDbHeaders, '');" ></app-button>
+      <app-button [classType]="['btn', 'btn-secondary']" [text]="'Reset filters'" [color]="'DarkKhaki'" (buttonClick)="reset(); this.currentPage = 1; resetAllOthersOrderType(tableDbHeaders, '');" ></app-button>
     </div>
     <div class="input-group justify-content-end">
       <div *ngIf="list.length>0" id="search-autocomplete" class="form-outline">

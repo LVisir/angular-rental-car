@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit {
       }))
       .subscribe({
         next: () => {
-          this.router.navigate(['/bookings'])
+          this.router.navigate(['/vehicles'])
         },
         error: () => {
           this.errorMessage = 'Internal server error'
