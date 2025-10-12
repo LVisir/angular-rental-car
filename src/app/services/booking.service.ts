@@ -8,7 +8,7 @@ import {Booking} from "../../interfaces/Booking";
 })
 export class BookingService {
 
-  private apiUrl = 'http://localhost:8091/bookings';
+  private apiUrl = 'http://localhost:32091/bookings';
 
   constructor(private http: HttpClient) {
   }
