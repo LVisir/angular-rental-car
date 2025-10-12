@@ -25,7 +25,7 @@ const httpLogin = {
 })
 export class UserService {
 
-  private apiUrl = 'http://localhost:32091/users';
+  private apiUrl = 'http://localhost:8091/users';
 
   private _userId?: number;
 
@@ -55,7 +55,7 @@ export class UserService {
   }
 
   login(credentials: string): Observable<any> {
-    return this.http.post<any>('http://localhost:32091/login', credentials);
+    return this.http.post<any>('http://localhost:8091/login', credentials);
   }
 
   getUsers(): Observable<User[]> {
