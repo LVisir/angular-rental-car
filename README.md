@@ -16,15 +16,44 @@ Front-end Angular project of a simple rental car application.
 
 ## General Info
 
-A front-end project of an application that allowed users to rent a car for a specific period of time. Some users are 'SUPERUSER' and they are the admin. They can insert, update, delete each data in the database.
+A front-end project made of three entities: vehicles, users, bookings. Each user can rent a vehicles for a period of time. Some users are 'SUPERUSER' and they are the admin. They can insert, update, delete each data in the database. Other users are 'CUSTOMER'. An user cannot rent a car in the period he has rented another car. When an user rent a car the request must be approved first before renting another one. Only 'SUPERUSER' can approve the bookings.
 ## Introduction
 
-The goal of this project is to learn how [Angular](https://angular.io/) works. There is a login page, a page for the vehicles, a page for the customers and a page for the bookings and each of them are represented by a dynamic table. It can be sorted, filtered and the user can search whatever data they need. An header will guide the user through all the possible actions.
+The goal of this project is to learn how [Angular](https://angular.io/) works. There is a login page, a page for the vehicles, a page for the customers and a page for the bookings and each of them are represented by a dynamic table. It can be sorted, filtered and the user can search whatever data they need. An header will guide the user through all the possible actions. The page of users can be visited just from the 'SUPERUSER'.
 ## Technologies
 - Angular 13.2.6
 ## Setup
 
-When you'll lunch the application, there is no data because you have to lunch firstly the back-end. Read here to setup it: [Back-end RentalCar](https://github.com/LVisir/spring-rental-car#readme) (it takes just a few minutes). After the back-end is running, just clone this repo, execute ```npm install``` and run ```ng serve```, wait the response untill the compilation is complete. The app is running on localhost:4200.
+When you'll lunch the application, there is no data because you have to lunch firstly the back-end. Read here to setup it: [Back-end RentalCar](https://github.com/LVisir/spring-rental-car?tab=readme-ov-file#setup) (it takes just a few minutes). After the back-end is running: 
+```
+git clone https://github.com/LVisir/angular-rental-car.git
+```
+```
+cd angular-rental-car
+```
+```
+./deploy.sh
+```
+Wait the response untill the compilation is complete. The app is running on localhost:4200. **NOTE: before launch check if the port 4200 is free!**
+
+When you'll see something like this the app is ready:
+![](./deploy_output.png)
+
+SUPERUSER credentials:
+```
+test@gmail.com
+```
+```
+1234
+```
+
+CUSTOMER credentials:
+```
+caccamo@gmail.com
+```
+```
+1234
+```
 ## Illustrations
 
 A brief overview of a page of an entity:
