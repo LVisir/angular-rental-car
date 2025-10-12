@@ -27,7 +27,11 @@ The goal of this project is to learn how [Angular](https://angular.io/) works. T
 When you'll lunch the application, there is no data because you have to lunch firstly the back-end. Read here to setup it: [Back-end RentalCar](https://github.com/LVisir/spring-rental-car?tab=readme-ov-file#setup) (it takes just a few minutes). After the back-end is running: 
 ```
 git clone https://github.com/LVisir/angular-rental-car.git
+```
+```
 cd angular-rental-car
+```
+```
 ./deploy.sh
 ```
 Wait the response untill the compilation is complete. The app is running on localhost:4200. **NOTE: before launch check if the port 4200 is free!**
